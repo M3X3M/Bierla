@@ -1,0 +1,23 @@
+#:kivy 1.11.1
+#:import rgba kivy.utils.rgba
+
+<DesignElements>:
+    
+    FloatLayout:
+        size: root.width, root.height
+
+        canvas.before:
+            Color:
+                rgba: rgba('#0a5e00')
+            Rectangle:
+                size: self.size
+
+        Image:
+            source: 'Resources/OfficialLogo.png'
+            size: self.texture_size
+
+        Label:
+            id: lblName
+            text: "Bierla"
+            pos_hint: {"x":0, "bottom":1}
+            
