@@ -12,12 +12,17 @@
             Rectangle:
                 size: self.size
 
-        Image:
-            source: 'Resources/OfficialLogo.png'
-            size: self.texture_size
+        Carousel:
+            direction: "right"
 
-        Label:
-            id: lblName
-            text: "Bierla"
-            pos_hint: {"x":0, "bottom":1}
+            Label:
+                text: "Members"
+   
+            Image:
+                source: 'Resources/OfficialLogo.png'
+                size: self.texture_size
+
+            Label:
+                id: lblName
+                text: "Bierla"
             
