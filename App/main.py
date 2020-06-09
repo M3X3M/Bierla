@@ -16,6 +16,8 @@ class BierlaApp(App):
 
     def build(self):
         self.designElements = DesignElements()
+        self.mainCarousel = self.designElements.ids['crsMain']
+
         return self.designElements
 
 
