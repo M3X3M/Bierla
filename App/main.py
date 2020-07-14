@@ -11,6 +11,8 @@ from kivy.uix.image import Image
 
 from member import Member
 
+import json
+
 # very important see documentation
 kivy.require("1.11.1")
 
@@ -32,13 +34,21 @@ class BierlaApp(App):
     #filling the members array with the members. Will be used to read
     #json file later     
     def fillMembersArray(self):
-        max = Member(["max","nax","wlasax"],['Test.jpg','Test2.jpg'],["ja ich wars"])
-        oli = Member(["schmolli","wolli","trolli"],['Test.jpg','Test2.jpg'],["lel"])
-        simon = Member(["simon","riemon","ziehmon"],['Test.jpg','Test2.jpg'],["ich weiß"])
+        with open('members.json') as file:
+            data = json.load(file)
+            for p in data['members']:
+                new_member = Member([p['firstname'], p['middlename'], p['lastname']],p['pictures'], p['statements'])
+                self.members.append(new_member)
 
-        self.members.append(max)
-        self.members.append(oli)
-        self.members.append(simon)
+
+
+        #max = Member(["max","nax","wlasax"],['Test.jpg','Test2.jpg'],["ja ich wars"])
+        #oli = Member(["schmolli","wolli","trolli"],['Test.jpg','Test2.jpg'],["lel"])
+        #simon = Member(["simon","riemon","ziehmon"],['Test.jpg','Test2.jpg'],["ich weiß"])
+
+        #self.members.append(max)
+        #self.members.append(oli)
+        #self.members.append(simon)
 
     #buildes the different pages of the members carousel
     def buildMembersCarousel(self):
