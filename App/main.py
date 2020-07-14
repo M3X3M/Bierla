@@ -6,6 +6,8 @@ from kivy.uix.widget import Widget
 from kivy.utils import rgba
 from kivy.uix.carousel import Carousel
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.image import Image
 
 from member import Member
 
@@ -30,9 +32,9 @@ class BierlaApp(App):
     #filling the members array with the members. Will be used to read
     #json file later     
     def fillMembersArray(self):
-        max = Member(["max","nax","wlasax"],[],["ja ich wars"])
-        oli = Member(["schmolli","wolli","trolli"],[],["lel"])
-        simon = Member(["simon","riemon","ziehmon"],[],["ich weiß"])
+        max = Member(["max","nax","wlasax"],['Test.jpg','Test2.jpg'],["ja ich wars"])
+        oli = Member(["schmolli","wolli","trolli"],['Test.jpg','Test2.jpg'],["lel"])
+        simon = Member(["simon","riemon","ziehmon"],['Test.jpg','Test2.jpg'],["ich weiß"])
 
         self.members.append(max)
         self.members.append(oli)
@@ -42,17 +44,24 @@ class BierlaApp(App):
     def buildMembersCarousel(self):
         for member in self.members:
             #creating the layout that holds all the fields
-            layout = BoxLayout(orientation='vertical')
+            layout = FloatLayout()
 
-            child1_layout_names = BoxLayout(orientation='horizontal')
-            child1_firstname = Label(text=member.getName(1))
-            child1_middlename = Label(text=member.getName(2))
-            child1_lastname = Label(text=member.getName(3))
-            child1_layout_names.add_widget(child1_firstname)
-            child1_layout_names.add_widget(child1_middlename)
-            child1_layout_names.add_widget(child1_lastname)
+            person_image = Image(source=member.getNextPicture(), allow_stretch=True, 
+                pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
+
+            layout_names = BoxLayout(orientation='horizontal', 
+                pos_hint={'x':.1, 'y':.6}, size_hint=(.8,.1))
+            lbl_names = Label(text=member.getName(1) + " " + '[i]' + 
+                member.getName(2) + '[/i]' + " " + member.getName(3), markup=True, 
+                font_size='40dp')
+            layout_names.add_widget(lbl_names)
+
+            lbl_statement = Label(text=member.getNextStatement(), font_size='25dp', 
+                pos_hint={'x':.1, 'y':.2}, size_hint=(.8,.4))
             
-            layout.add_widget(child1_layout_names)
+            layout.add_widget(lbl_statement)
+            layout.add_widget(person_image)
+            layout.add_widget(layout_names)
 
             self.members_carousel.add_widget(layout)
 
