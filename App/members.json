@@ -1,94 +1,96 @@
-{
-    "members":[
-        {
-            "firstname" : "Naxi",
-            "middlename" : "Larry",
-            "lastname" : "Wlaxax",
-            "pictures" : [
-                "Test.jpg",
-                "Test2.jpg"
-            ],
-            "statements" : null
-        },
-        {
-            "firstname" : "Polifem",
-            "middlename" : "Spasd",
-            "lastname" : "Bergsitz",
-            "pictures" : [
-                "Test.jpg",
-                "Test2.jpg"
-            ],
-            "statements" : null
-        },
-        {
-            "firstname" : "Dimen",
-            "middlename" : "Lutscher",
-            "lastname" : "Schniedl",
-            "pictures" : [
-                "Test.jpg",
-                "Test2.jpg"
-            ],
-            "statements" : null
-        },
-        {
-            "firstname" : "Swagmuel",
-            "middlename" : "Drecksack",
-            "lastname" : "Homosellerie",
-            "pictures" : [
-                "Test.jpg",
-                "Test2.jpg"
-            ],
-            "statements" : null
-        },
-        {
-            "firstname" : "Zilwon",
-            "middlename" : "Lauch",
-            "lastname" : "Singerel",
-            "pictures" : [
-                "Test.jpg",
-                "Test2.jpg"
-            ],
-            "statements" : null
-        },
-        {
-            "firstname" : "Spielian",
-            "middlename" : "Zacher-Wichser",
-            "lastname" : "Haschkecks",
-            "pictures" : [
-                "Test.jpg",
-                "Test2.jpg"
-            ],
-            "statements" : null
-        },
-        {
-            "firstname" : "Sebias",
-            "middlename" : "Nur-Ein-Witz",
-            "lastname" : "Lickdadick",
-            "pictures" : [
-                "Test.jpg",
-                "Test2.jpg"
-            ],
-            "statements" : null
-        },
-        {
-            "firstname" : "Bion",
-            "middlename" : "Pfosten",
-            "lastname" : "Daumpartner",
-            "pictures" : [
-                "Test.jpg",
-                "Test2.jpg"
-            ],
-            "statements" : null
-        },
-        {
-            "firstname" : "Schlucka",
-            "middlename" : "?",
-            "lastname" : "Hunger",
-            "pictures" : [
-                "Test.jpg",
-                "Test2.jpg"
-            ],
-            "statements" : null
-        }
-    ]
-}
+[
+    {
+        "firstname" : "Naxi",
+        "middlename" : "Larry",
+        "lastname" : "Wlaxax",
+        "pictures" : [
+            "Test.jpg",
+            "Test2.jpg"
+        ],
+        "statements" : [
+            "hallo",
+            "i",
+            "bims"
+        ]
+    },
+    {
+        "firstname" : "Polifem",
+        "middlename" : "Spasd",
+        "lastname" : "Bergsitz",
+        "pictures" : [
+            "Test.jpg",
+            "Test2.jpg"
+        ],
+        "statements" : null
+    },
+    {
+        "firstname" : "Dimen",
+        "middlename" : "Lutscher",
+        "lastname" : "Schniedl",
+        "pictures" : [
+            "Test.jpg",
+            "Test2.jpg"
+        ],
+        "statements" : null
+    },
+    {
+        "firstname" : "Swagmuel",
+        "middlename" : "Drecksack",
+        "lastname" : "Homosellerie",
+        "pictures" : [
+            "Test.jpg",
+            "Test2.jpg"
+        ],
+        "statements" : null
+    },
+    {
+        "firstname" : "Zilwon",
+        "middlename" : "Lauch",
+        "lastname" : "Singerel",
+        "pictures" : [
+            "Test.jpg",
+            "Test2.jpg"
+        ],
+        "statements" : null
+    },
+    {
+        "firstname" : "Spielian",
+        "middlename" : "Zacher-Wichser",
+        "lastname" : "Haschkecks",
+        "pictures" : [
+            "Test.jpg",
+            "Test2.jpg"
+        ],
+        "statements" : null
+    },
+    {
+        "firstname" : "Sebias",
+        "middlename" : "Nur-Ein-Witz",
+        "lastname" : "Lickdadick",
+        "pictures" : [
+            "Test.jpg",
+            "Test2.jpg"
+        ],
+        "statements" : null
+    },
+    {
+        "firstname" : "Bion",
+        "middlename" : "Pfosten",
+        "lastname" : "Daumpartner",
+        "pictures" : [
+            "Test.jpg",
+            "Test2.jpg"
+        ],
+        "statements" : null
+    },
+    {
+        "firstname" : "Schlucka",
+        "middlename" : "?",
+        "lastname" : "Hunger",
+        "pictures" : [
+            "Test.jpg",
+            "Test2.jpg"
+        ],
+        "statements" : null
+    }
+]

@@ -13,13 +13,17 @@ class Member:
         
         #initialising the locations where the pictures are stored
         self.pictures = []
-        for picture in pictures:
-            self.pictures.append(picture)
+        if pictures[0] != None:
+            for picture in pictures:
+                self.pictures.append(picture)
 
         #initialising the statements of the member
         self.statements = []
-        for statement in statements:
-            self.statements.append(statement)
+        if statements != None:
+            for statement in statements:
+                self.statements.append(statement)
+        else:
+            self.statements.append("-")
         
         #starting to iterate at the first position of the corresponding arrays
         self.picture_iterator = 0

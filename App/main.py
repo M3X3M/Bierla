@@ -62,7 +62,13 @@ class BierlaApp(App):
         with open(self.current_selected_path + '/members.json', 'r') as file:
             data = file.read()
 
-        obj = json.loads(data)
+        members_dict = json.loads(data)
+
+        for member in members_dict:
+            tmp_member = Member([member['firstname'], member['middlename'], 
+                member['lastname']], member['pictures'], member['statements'])
+
+            self.members.append(tmp_member)
 
         
         #max = Member(["max","nax","wlasax"],['Test.jpg','Test2.jpg'],["ja ich wars"])
