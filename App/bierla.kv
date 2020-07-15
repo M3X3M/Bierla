@@ -31,7 +31,14 @@
                 source: 'Resources/OfficialLogo.png'
                 size: self.texture_size
 
-            Label:
-                id: lblName
-                text: "Bierla"
+            BoxLayout:
+                orientation: 'horizontal'
+                
+                Button:
+                    text: "Set Filepath"
+                    id: btnSetFilepath
+
+                Label:
+                    text: "currently no path"
+                    id:lblFilePath
             
