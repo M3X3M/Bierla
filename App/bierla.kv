@@ -24,21 +24,54 @@
 
                 Label:
                     id: lblMembers
-                    text: "Members"
+                    text: "Richtige Lappen"
+                    font_size: '50dp'
 
-   
-            Image:
-                source: 'Resources/OfficialLogo.png'
-                size: self.texture_size
+            FloatLayout:
+                size: root.width, root.height
 
-            BoxLayout:
-                orientation: 'horizontal'
-                
-                Button:
-                    text: "Set Filepath"
-                    id: btnSetFilepath
+                Image:
+                    source: 'Resources/OfficialLogo.png'
+                    pos_hint: {'x':.1, 'top':1}
+                    size_hint:(.8,.8)
+                    allow_stretch: 'True'
 
                 Label:
-                    text: "currently no path"
-                    id:lblFilePath
+                    text: "Willkommen in der BIERLA App V3"
+                    font_size: '50dp'
+                    pos_hint: {'x':.1, 'bottom':1}
+                    size_hint:(.8,.2)
+
+            FloatLayout:
+                size: root.width, root.height
+
+                GridLayout:
+                    cols: 2
+                    pos_hint: {"x":0,"top":.9}
+                    size_hint:(1,.1)
+
+                    canvas.after:
+                        Color:
+                            rgba: rgba('#ffffff')
+                        Line:
+                            width: 1
+                            rectangle: self.x, self.y, self.width, self.height
+                
+                    Button:
+                        text: "Set Filepath"
+                        id: btnSetFilepath
+                        background_normal: ""
+                        background_color: rgba('#0a5e00')
+
+                    BoxLayout:
+                        orientation: "vertical"
+
+                        Label:
+                            markup: True
+                            text: "[b]current path:[/b]"
+                            font_size: "20dp"
+
+                        Label:
+                            text: "currently no path"
+                            id:lblFilePath
             

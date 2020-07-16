@@ -56,8 +56,7 @@ class BierlaApp(App):
         self.current_selected_path = store.get('path')['value']
         self.lbl_file_path.text = self.current_selected_path
 
-    #filling the members array with the members. Will be used to read
-    #json file later     
+    #filling the members array with members from the members.json file  
     def fillMembersArray(self):
         with open(self.current_selected_path + '/members.json', 'r') as file:
             data = file.read()
@@ -66,18 +65,9 @@ class BierlaApp(App):
 
         for member in members_dict:
             tmp_member = Member([member['firstname'], member['middlename'], 
-                member['lastname']], member['pictures'], member['statements'])
+                member['lastname']], member['birthday'], member['pictures'], member['statements'])
 
             self.members.append(tmp_member)
-
-        
-        #max = Member(["max","nax","wlasax"],['Test.jpg','Test2.jpg'],["ja ich wars"])
-        #oli = Member(["schmolli","wolli","trolli"],['Test.jpg','Test2.jpg'],["lel"])
-        #simon = Member(["simon","riemon","ziehmon"],['Test.jpg','Test2.jpg'],["ich weiß"])
-
-        #self.members.append(max)
-        #self.members.append(oli)
-        #self.members.append(simon)
 
     #buildes the different pages of the members carousel
     def buildMembersCarousel(self):
@@ -97,7 +87,11 @@ class BierlaApp(App):
 
             lbl_statement = Label(text=member.getNextStatement(), font_size='25dp', 
                 pos_hint={'x':.1, 'y':.2}, size_hint=(.8,.4))
+
+            lbl_birthday = Label(text=member.getBirthday(), font_size='20dp', 
+                pos_hint={'x':.2, 'bottom':1}, size_hint=(.6,.1))
             
+            layout.add_widget(lbl_birthday)
             layout.add_widget(lbl_statement)
             layout.add_widget(person_image)
             layout.add_widget(layout_names)

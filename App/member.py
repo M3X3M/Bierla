@@ -1,7 +1,7 @@
 import random
 
 class Member:
-    def __init__(self, names, pictures, statements):
+    def __init__(self, names, birthday, pictures, statements):
         #initialising the names of the member, they need to be provided
         try:
             self.first_name = names[0]
@@ -10,6 +10,8 @@ class Member:
         except:
             print("Name-setting-Error")
             return
+
+        self.birthday = birthday
         
         #initialising the locations where the pictures are stored
         self.pictures = []
@@ -80,6 +82,10 @@ class Member:
             self.statement_iterator = 0
 
         return self.statements[current_pos]
+
+    #getting the birthday of the member
+    def getBirthday(self):
+        return self.birthday
 
 
 
