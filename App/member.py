@@ -13,6 +13,7 @@ class Member:
 
         self.birthday = birthday
         
+        #TODO: Bilder aus den Ordnern holen
         #initialising the locations where the pictures are stored
         self.pictures = []
         if pictures[0] != None:

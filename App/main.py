@@ -58,16 +58,20 @@ class BierlaApp(App):
 
     #filling the members array with members from the members.json file  
     def fillMembersArray(self):
-        with open(self.current_selected_path + '/members.json', 'r') as file:
-            data = file.read()
+        try:
+            with open(self.current_selected_path + '/members.json', 'r') as file:
+                data = file.read()
 
-        members_dict = json.loads(data)
+            members_dict = json.loads(data)
 
-        for member in members_dict:
-            tmp_member = Member([member['firstname'], member['middlename'], 
-                member['lastname']], member['birthday'], member['pictures'], member['statements'])
+            for member in members_dict:
+                tmp_member = Member([member['firstname'], member['middlename'], 
+                    member['lastname']], member['birthday'], member['pictures'], member['statements'])
 
-            self.members.append(tmp_member)
+                self.members.append(tmp_member)
+        except:
+            #TODO: ERROR Popup machen
+            pass
 
     #buildes the different pages of the members carousel
     def buildMembersCarousel(self):
@@ -126,6 +130,8 @@ class BierlaApp(App):
 
         #closing the popup
         self.popup.dismiss()
+
+#TODO: Refresh members.json erstellen
 
 if __name__ == '__main__':
     BierlaApp().run()
