@@ -1,7 +1,8 @@
 import random
+from kivy.uix.filechooser import FileSystemLocal
 
 class Member:
-    def __init__(self, names, birthday, pictures, statements):
+    def __init__(self, names, birthday, statements, path):
         #initialising the names of the member, they need to be provided
         try:
             self.first_name = names[0]
@@ -13,12 +14,9 @@ class Member:
 
         self.birthday = birthday
         
-        #TODO: Bilder aus den Ordnern holen
-        #initialising the locations where the pictures are stored
         self.pictures = []
-        if pictures[0] != None:
-            for picture in pictures:
-                self.pictures.append(picture)
+        self.findPictures(path)
+        print(self.pictures)
 
         #initialising the statements of the member
         self.statements = []
@@ -62,10 +60,14 @@ class Member:
         current_pos = self.picture_iterator
 
         #checking if we reached the end of the array
-        if self.picture_iterator + 1 < len(self.pictures):
+        if self.pictures == []:
+            self.picture_iterator = 0
+            return
+        elif self.picture_iterator + 1 < len(self.pictures):
             self.picture_iterator = self.picture_iterator + 1
         else:
             self.picture_iterator = 0
+            return
 
         return self.pictures[current_pos]
 
@@ -88,5 +90,13 @@ class Member:
     def getBirthday(self):
         return self.birthday
 
-
+    def findPictures(self, path):
+        file_system = FileSystemLocal()
+        files = file_system.listdir(path + '/' + self.first_name)   # this returns a list of files in dir of each member
+        #adding all .jpg or png files to the pictures array
+        for file in files:
+            #checking filetype
+            if file[-4:] == '.jpg' or file[-4:] == '.png':
+                complete_filepath = path + '/' + self.first_name + '/' + file
+                self.pictures.append(complete_filepath)
 

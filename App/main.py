@@ -66,7 +66,7 @@ class BierlaApp(App):
 
             for member in members_dict:
                 tmp_member = Member([member['firstname'], member['middlename'], 
-                    member['lastname']], member['birthday'], member['pictures'], member['statements'])
+                    member['lastname']], member['birthday'], member['statements'], self.current_selected_path)
 
                 self.members.append(tmp_member)
         except:
