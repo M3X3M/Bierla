@@ -1,5 +1,10 @@
 import random
+
+import kivy
 from kivy.uix.filechooser import FileSystemLocal
+
+# very important see documentation
+kivy.require("1.11.1")
 
 class Member:
     def __init__(self, names, birthday, statements, path):

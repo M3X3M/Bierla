@@ -14,6 +14,7 @@ from kivy.uix.button import Button
 from kivy.storage.jsonstore import JsonStore
 
 from member import Member
+from error import Error
 
 import json
 
@@ -32,20 +33,24 @@ class BierlaApp(App):
         self.members_carousel = self.designElements.ids['crsMembers']
         self.btn_set_file_path = self.designElements.ids['btnSetFilepath']
         self.lbl_file_path = self.designElements.ids['lblFilePath']
+        self.btn_refresh_members = self.designElements.ids['btnRefreshMembers']
+        self.lbl_members_count = self.designElements.ids['lblMembersCount']
 
         #the json store where permanent data is stored
         self.app_data_name = 'AppData.json'
 
         #binding buttons with their callbacks
         self.btn_set_file_path.bind(on_press=self.showSetFilepathPopup)
+        self.btn_refresh_members.bind(on_press=self.refreshCallback)
 
         #loading the currently stored data (if there is any)
         self.loadDataPath()
 
         #setting up the members
         self.members = []
-        self.fillMembersArray()
-        self.buildMembersCarousel()
+        self.refreshMembers()
+
+        self.error = Error()
 
         return self.designElements
 
@@ -70,8 +75,7 @@ class BierlaApp(App):
 
                 self.members.append(tmp_member)
         except:
-            #TODO: ERROR Popup machen
-            pass
+            self.error.membersJsonParsingError()
 
     #buildes the different pages of the members carousel
     def buildMembersCarousel(self):
@@ -131,7 +135,24 @@ class BierlaApp(App):
         #closing the popup
         self.popup.dismiss()
 
-#TODO: Refresh members.json erstellen
+        #refreshing membersarry
+        self.refreshMembers()
+
+    #used to refresh the whole members array and all connected attributes. Automatically called 
+    # after path changed and start. Also callback for refresh button in settings
+    def refreshMembers(self):
+        #refreshing the members array
+        self.members.clear()
+        self.fillMembersArray()
+        self.buildMembersCarousel()
+
+        #setting the label that counts detected members
+        self.lbl_members_count.text = "currently " + str(len(self.members)) + " members detected"
+
+    #used as a direct callback because button gives 2 positional arguments
+    def refreshCallback(self,instance):
+        self.refreshMembers()
+        
 
 if __name__ == '__main__':
     BierlaApp().run()
