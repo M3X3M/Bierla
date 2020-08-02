@@ -16,6 +16,8 @@ from kivy.storage.jsonstore import JsonStore
 from member import Member
 from error import Error
 
+from functools import partial
+
 import json
 
 # very important see documentation
@@ -98,7 +100,21 @@ class BierlaApp(App):
 
             lbl_birthday = Label(text=member.getBirthday(), font_size='20dp', 
                 pos_hint={'x':.2, 'bottom':1}, size_hint=(.6,.1))
+
+            #adding a vertical row of buttons to quickly navigate to specific members
+            layout_scroller = BoxLayout(orientation='vertical', pos_hint={'right':.9, 'bottom':1}, size_hint=(.1,1))
+
+            #using a counter var for the position of the members in their array
+            count = 0
+
+            #looping through the members and creating a button for each one
+            for member in self.members:
+                tmp_button = Button(text=member.getName(1), id='btnJump' + member.getName(1), font_size='10dp')
+                tmp_button.bind(on_press=partial(self.jumpToMember, count))
+                layout_scroller.add_widget(tmp_button)
+                count = count + 1
             
+            layout.add_widget(layout_scroller)
             layout.add_widget(lbl_birthday)
             layout.add_widget(lbl_statement)
             layout.add_widget(person_image)
@@ -151,8 +167,12 @@ class BierlaApp(App):
 
     #used as a direct callback because button gives 2 positional arguments
     def refreshCallback(self,instance):
-        self.refreshMembers()
-        
+        self.refreshMembers()      
+
+    def jumpToMember(self, memberNumber, instance):
+        #needed +2 cause there currently is an extra page at loading + one based numbering is used
+        #self.members_carousel.load_slide(memberNumber+1)
+        pass
 
 if __name__ == '__main__':
     BierlaApp().run()
