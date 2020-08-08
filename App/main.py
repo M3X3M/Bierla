@@ -81,6 +81,7 @@ class BierlaApp(App):
 
     #buildes the different pages of the members carousel
     def buildMembersCarousel(self):
+        loop_counter = 0
         for member in self.members:
             #creating the layout that holds all the fields
             layout = FloatLayout()
@@ -95,32 +96,41 @@ class BierlaApp(App):
                 font_size='40dp')
             layout_names.add_widget(lbl_names)
 
-            lbl_statement = Label(text=member.getNextStatement(), font_size='25dp', 
+            btn_statement = Button(text=member.getNextStatement(), font_size='25dp', background_normal='', background_color=rgba('#0a5e00'),
                 pos_hint={'x':.1, 'y':.2}, size_hint=(.8,.4))
+
+            btn_statement.bind(on_press=partial(self.nextStatementCallback, loop_counter))
 
             lbl_birthday = Label(text=member.getBirthday(), font_size='20dp', 
                 pos_hint={'x':.2, 'bottom':1}, size_hint=(.6,.1))
 
             #adding a vertical row of buttons to quickly navigate to specific members
-            layout_scroller = BoxLayout(orientation='vertical', pos_hint={'right':.9, 'bottom':1}, size_hint=(.1,1))
+            layout_scroller = BoxLayout(orientation='vertical', pos_hint={'right':1, 'bottom':1}, size_hint=(.1,1))
 
             #using a counter var for the position of the members in their array
             count = 0
 
             #looping through the members and creating a button for each one
-            for member in self.members:
-                tmp_button = Button(text=member.getName(1), id='btnJump' + member.getName(1), font_size='10dp')
+            for member_btn in self.members:
+                #if we are on the specific slide of a member the specific button should be colored accordingly
+                if member.getName(1) == member_btn.getName(1):
+                    tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='10dp', background_color=rgba('#000000'))
+                else:
+                    tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='10dp')
+
                 tmp_button.bind(on_press=partial(self.jumpToMember, count))
                 layout_scroller.add_widget(tmp_button)
                 count = count + 1
             
             layout.add_widget(layout_scroller)
             layout.add_widget(lbl_birthday)
-            layout.add_widget(lbl_statement)
+            layout.add_widget(btn_statement)
             layout.add_widget(person_image)
             layout.add_widget(layout_names)
 
             self.members_carousel.add_widget(layout)
+
+            loop_counter = loop_counter + 1
 
     #creating the popup that lets the user select the path to the apps datafiles
     def showSetFilepathPopup(self, instance):
@@ -169,9 +179,14 @@ class BierlaApp(App):
     def refreshCallback(self,instance):
         self.refreshMembers()      
 
+    #jumping to a specific member in the carousel, where member number defines the number in the array
     def jumpToMember(self, memberNumber, instance):
         #needed +2 cause there currently is an extra page at loading + one based numbering is used
-        #self.members_carousel.load_slide(memberNumber+1)
+        self.members_carousel.index = memberNumber + 1
+        pass
+
+    def nextStatementCallback(self, memberNumber, instance):
+        #self.members[memberNumber].getNextStatement()
         pass
 
 if __name__ == '__main__':
