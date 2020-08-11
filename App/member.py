@@ -21,7 +21,6 @@ class Member:
         
         self.pictures = []
         self.findPictures(path)
-        print(self.pictures)
 
         #initialising the statements of the member
         self.statements = []
@@ -62,34 +61,30 @@ class Member:
     #the array and will give the next picture each time it is called
     #if we reach the end of the array we just restart
     def getNextPicture(self):
-        current_pos = self.picture_iterator
-
         #checking if we reached the end of the array
+        #if there are no pics for this member, return ''
         if self.pictures == []:
             self.picture_iterator = 0
-            return
+            return ''
         elif self.picture_iterator + 1 < len(self.pictures):
             self.picture_iterator = self.picture_iterator + 1
         else:
             self.picture_iterator = 0
-            return
 
-        return self.pictures[current_pos]
+        return self.pictures[self.picture_iterator]
 
 
     #getting a statement of the statement array. Is aware of its position in 
     #the array and will give the next statement each time it is called
     #if we reach the end of the array we just restart
     def getNextStatement(self):
-        current_pos = self.statement_iterator
-
         #checking if we reached the end of the array
         if self.statement_iterator + 1 < len(self.statements):
             self.statement_iterator = self.statement_iterator + 1
         else:
             self.statement_iterator = 0
 
-        return self.statements[current_pos]
+        return self.statements[self.statement_iterator]
 
     #getting the birthday of the member
     def getBirthday(self):
@@ -104,4 +99,3 @@ class Member:
             if file[-4:] == '.jpg' or file[-4:] == '.png':
                 complete_filepath = path + '/' + self.first_name + '/' + file
                 self.pictures.append(complete_filepath)
-

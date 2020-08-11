@@ -86,10 +86,11 @@ class BierlaApp(App):
             #creating the layout that holds all the fields
             layout = FloatLayout()
 
-            btn_next_picture = Button(background_normal='', background_color=rgba(0,0,0,0), pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
-
             person_image = Image(source=member.getNextPicture(), allow_stretch=True, 
                 pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
+
+            btn_next_picture = Button(background_normal='', background_color=rgba(0,0,0,0), pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
+            btn_next_picture.bind(on_press=partial(self.nextPictureCallback, loop_counter, person_image))
 
             layout_names = BoxLayout(orientation='horizontal', 
                 pos_hint={'x':.1, 'y':.6}, size_hint=(.8,.1))
@@ -98,7 +99,7 @@ class BierlaApp(App):
                 font_size='40dp')
             layout_names.add_widget(lbl_names)
 
-            btn_statement = Button(text=member.getNextStatement(), font_size='25dp', background_normal='', background_color=rgba('#0a5e00'),
+            btn_statement = Button(text=member.getNextStatement(), font_size='25dp', background_normal='', background_color=rgba(0,0,0,0),
                 pos_hint={'x':.1, 'y':.2}, size_hint=(.8,.4))
 
             btn_statement.bind(on_press=partial(self.nextStatementCallback, loop_counter, btn_statement))
@@ -116,7 +117,7 @@ class BierlaApp(App):
             for member_btn in self.members:
                 #if we are on the specific slide of a member the specific button should be colored accordingly
                 if member.getName(1) == member_btn.getName(1):
-                    tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='10dp', background_color=rgba('#000000'))
+                    tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='10dp', background_color=rgba(0,0,0,0))
                 else:
                     tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='10dp')
 
@@ -192,8 +193,8 @@ class BierlaApp(App):
     def nextStatementCallback(self, memberNumber, label, instance):
         label.text = self.members[memberNumber].getNextStatement()
 
-    def nextPictureCallback(self, memberNumber, button, instance):
-        pass
+    def nextPictureCallback(self, memberNumber, image, instance):
+        image.source = self.members[memberNumber].getNextPicture()
 
 if __name__ == '__main__':
     BierlaApp().run()
