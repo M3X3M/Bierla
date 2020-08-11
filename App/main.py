@@ -86,6 +86,8 @@ class BierlaApp(App):
             #creating the layout that holds all the fields
             layout = FloatLayout()
 
+            btn_next_picture = Button(background_normal='', background_color=rgba(0,0,0,0), pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
+
             person_image = Image(source=member.getNextPicture(), allow_stretch=True, 
                 pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
 
@@ -99,7 +101,7 @@ class BierlaApp(App):
             btn_statement = Button(text=member.getNextStatement(), font_size='25dp', background_normal='', background_color=rgba('#0a5e00'),
                 pos_hint={'x':.1, 'y':.2}, size_hint=(.8,.4))
 
-            btn_statement.bind(on_press=partial(self.nextStatementCallback, loop_counter))
+            btn_statement.bind(on_press=partial(self.nextStatementCallback, loop_counter, btn_statement))
 
             lbl_birthday = Label(text=member.getBirthday(), font_size='20dp', 
                 pos_hint={'x':.2, 'bottom':1}, size_hint=(.6,.1))
@@ -127,6 +129,7 @@ class BierlaApp(App):
             layout.add_widget(btn_statement)
             layout.add_widget(person_image)
             layout.add_widget(layout_names)
+            layout.add_widget(btn_next_picture)
 
             self.members_carousel.add_widget(layout)
 
@@ -185,8 +188,11 @@ class BierlaApp(App):
         self.members_carousel.index = memberNumber + 1
         pass
 
-    def nextStatementCallback(self, memberNumber, instance):
-        #self.members[memberNumber].getNextStatement()
+    #on tap on the label, the next statement of a member is displayed
+    def nextStatementCallback(self, memberNumber, label, instance):
+        label.text = self.members[memberNumber].getNextStatement()
+
+    def nextPictureCallback(self, memberNumber, button, instance):
         pass
 
 if __name__ == '__main__':
