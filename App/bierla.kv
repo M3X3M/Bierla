@@ -22,10 +22,21 @@
                 loop: 'True'
                 id: crsMembers
 
-                Label:
-                    id: lblMembers
-                    text: "Richtige Lappen"
-                    font_size: '50dp'
+                BoxLayout:
+                    orientation: 'vertical'
+
+                    Image:
+                        source: 'Resources/up_2.png'
+                        allow_stretch: 'False'
+
+                    Label:
+                        id: lblMembers
+                        text: "Richtige Lappen"
+                        font_size: '50dp'
+
+                    Image:
+                        source: 'Resources/down_2.png'
+                        allow_stretch: 'False'
 
             FloatLayout:
                 size: root.width, root.height

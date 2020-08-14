@@ -117,9 +117,9 @@ class BierlaApp(App):
             for member_btn in self.members:
                 #if we are on the specific slide of a member the specific button should be colored accordingly
                 if member.getName(1) == member_btn.getName(1):
-                    tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='10dp', background_color=rgba(0,0,0,0))
+                    tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='25dp', background_color=rgba(0,0,0,0))
                 else:
-                    tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='10dp')
+                    tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='25dp', background_normal = '', background_color=rgba('000000'))
 
                 tmp_button.bind(on_press=partial(self.jumpToMember, count))
                 layout_scroller.add_widget(tmp_button)
