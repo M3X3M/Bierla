@@ -17,27 +17,6 @@
             loop: 'True'
             id: crsMain
 
-            Carousel:
-                direction: "bottom"
-                loop: 'True'
-                id: crsMembers
-
-                BoxLayout:
-                    orientation: 'vertical'
-
-                    Image:
-                        source: 'Resources/up_2.png'
-                        allow_stretch: 'False'
-
-                    Label:
-                        id: lblMembers
-                        text: "Richtige Lappen"
-                        font_size: '50dp'
-
-                    Image:
-                        source: 'Resources/down_2.png'
-                        allow_stretch: 'False'
-
             FloatLayout:
                 size: root.width, root.height
 
@@ -56,23 +35,22 @@
             FloatLayout:
                 size: root.width, root.height
 
+                Label:
+                    text: "Einstellungen"
+                    font_size: '50dp'
+                    pos_hint: {"center_y": .95,"center_x": 0.5}
+                    size_hint: (.5,.2)
+
                 GridLayout:
                     cols: 2
                     pos_hint: {"x":0,"top":.9}
                     size_hint:(1,.1)
-
-                    canvas.after:
-                        Color:
-                            rgba: rgba('#ffffff')
-                        Line:
-                            width: 1
-                            rectangle: self.x, self.y, self.width, self.height
                 
                     Button:
                         text: "Set Filepath"
                         id: btnSetFilepath
                         background_normal: ""
-                        background_color: rgba('#0a5e00')
+                        background_color: rgba('#0F0F0F')
 
                     BoxLayout:
                         orientation: "vertical"
@@ -90,7 +68,7 @@
                         text: "Refresh members.json"
                         id: btnRefreshMembers
                         background_normal: ""
-                        background_color: rgba('#0a5e00')
+                        background_color: rgba('#0F0F0F')
 
                     Label:
                         text: "currently 0 members detected"

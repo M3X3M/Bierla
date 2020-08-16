@@ -32,7 +32,6 @@ class BierlaApp(App):
         #initializing the elements from the .kv file
         self.designElements = DesignElements()
         self.main_carousel = self.designElements.ids['crsMain']
-        self.members_carousel = self.designElements.ids['crsMembers']
         self.btn_set_file_path = self.designElements.ids['btnSetFilepath']
         self.lbl_file_path = self.designElements.ids['lblFilePath']
         self.btn_refresh_members = self.designElements.ids['btnRefreshMembers']
@@ -40,6 +39,8 @@ class BierlaApp(App):
 
         #the json store where permanent data is stored
         self.app_data_name = 'AppData.json'
+
+        self.members_carousel = Carousel(direction='bottom')
 
         #binding buttons with their callbacks
         self.btn_set_file_path.bind(on_press=self.showSetFilepathPopup)
@@ -65,6 +66,7 @@ class BierlaApp(App):
 
     #filling the members array with members from the members.json file  
     def fillMembersArray(self):
+        self.loadDataPath()
         try:
             with open(self.current_selected_path + '/members.json', 'r') as file:
                 data = file.read()
@@ -77,7 +79,7 @@ class BierlaApp(App):
 
                 self.members.append(tmp_member)
         except:
-            self.error.membersJsonParsingError()
+            print('Error parsing')
 
     #buildes the different pages of the members carousel
     def buildMembersCarousel(self):
@@ -119,7 +121,7 @@ class BierlaApp(App):
                 if member.getName(1) == member_btn.getName(1):
                     tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='25dp', background_color=rgba(0,0,0,0))
                 else:
-                    tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='25dp', background_normal = '', background_color=rgba('000000'))
+                    tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='25dp', background_normal = '', background_color=rgba('0F0F0F'))
 
                 tmp_button.bind(on_press=partial(self.jumpToMember, count))
                 layout_scroller.add_widget(tmp_button)
@@ -135,6 +137,12 @@ class BierlaApp(App):
             self.members_carousel.add_widget(layout)
 
             loop_counter = loop_counter + 1
+
+        self.main_carousel.add_widget(self.members_carousel)
+
+    #clearing th page where the old members carousel was sitting
+    def clearMembersCarousel(self):
+        pass
 
     #creating the popup that lets the user select the path to the apps datafiles
     def showSetFilepathPopup(self, instance):
@@ -174,6 +182,7 @@ class BierlaApp(App):
         #refreshing the members array
         self.members.clear()
         self.fillMembersArray()
+
         self.buildMembersCarousel()
 
         #setting the label that counts detected members
@@ -186,7 +195,7 @@ class BierlaApp(App):
     #jumping to a specific member in the carousel, where member number defines the number in the array
     def jumpToMember(self, memberNumber, instance):
         #needed +2 cause there currently is an extra page at loading + one based numbering is used
-        self.members_carousel.index = memberNumber + 1
+        self.members_carousel.index = memberNumber 
         pass
 
     #on tap on the label, the next statement of a member is displayed
