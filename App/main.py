@@ -28,6 +28,10 @@ class DesignElements(Widget):
 
 class BierlaApp(App):
 
+    ############################################################################
+    # first function called in when the program is launched. It is used to 
+    # map all objects
+    ############################################################################
     def build(self):
         #initializing the elements from the .kv file
         self.designElements = DesignElements()
@@ -40,7 +44,8 @@ class BierlaApp(App):
         #the json store where permanent data is stored
         self.app_data_name = 'AppData.json'
 
-        self.members_carousel = Carousel(direction='bottom')
+        #creating the members carousel, to access it later in members carousel
+        self.members_carousel = Carousel(direction='bottom', loop='True')
 
         #binding buttons with their callbacks
         self.btn_set_file_path.bind(on_press=self.showSetFilepathPopup)
@@ -49,14 +54,21 @@ class BierlaApp(App):
         #loading the currently stored data (if there is any)
         self.loadDataPath()
 
-        #setting up the members
+        #setting up the members by adding them into an array and then filling 
+        # the array in the method
         self.members = []
         self.refreshMembers()
 
+        #initialising the errors class // Not Functional at the moment
         self.error = Error()
 
+        #kivy thing
         return self.designElements
 
+    ############################################################################
+    # loading the already safed paths of the appData (permantently saved data)
+    # if there is none, all the paths are set as stated in this function
+    ############################################################################
     def loadDataPath(self):
         store = JsonStore(self.app_data_name)
 
@@ -68,24 +80,37 @@ class BierlaApp(App):
             self.current_selected_path = ""
             self.lbl_file_path.text = ""
 
+    ############################################################################
+    # adding all the members out of the stored appdata into the members array
+    # if there is none it will just print to console
+    ############################################################################
     #filling the members array with members from the members.json file  
     def fillMembersArray(self):
         self.loadDataPath()
         try:
-            with open(self.current_selected_path + '/members.json', 'r') as file:
+            with open(self.current_selected_path + '/members.json', 
+                'r') as file:
                 data = file.read()
 
             members_dict = json.loads(data)
 
             for member in members_dict:
                 tmp_member = Member([member['firstname'], member['middlename'], 
-                    member['lastname']], member['birthday'], member['statements'], self.current_selected_path)
+                    member['lastname']], member['birthday'], 
+                    member['statements'], self.current_selected_path)
 
                 self.members.append(tmp_member)
         except:
             print('No path')
 
-    #buildes the different pages of the members carousel
+    ############################################################################
+    # TODO: Split further, methode is too long
+    # rebuilding the memberscarousel from scratch by wiping the old one and 
+    # filling the new one with the current state of the members array. For the 
+    # different members there are different buttons so they need to by binded 
+    # to functions with some different attributes. The whole design of the 
+    # carousel is designed here
+    ############################################################################
     def buildMembersCarousel(self):
         #removing the memberscarousel from the main one to rebuild it properly
         self.main_carousel.remove_widget(self.members_carousel)
@@ -104,40 +129,58 @@ class BierlaApp(App):
                 #creating the layout that holds all the fields
                 layout = FloatLayout()
 
-                person_image = Image(source=member.getNextPicture(), allow_stretch=True, 
+                person_image = Image(source=member.getNextPicture(), 
+                    allow_stretch=True, 
                     pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
 
-                btn_next_picture = Button(background_normal='', background_color=rgba(0,0,0,0), pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
-                btn_next_picture.bind(on_press=partial(self.nextPictureCallback, loop_counter, person_image))
+                btn_next_picture = Button(background_normal='', 
+                    background_color=rgba(0,0,0,0), 
+                    pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
+
+                btn_next_picture.bind(on_press=partial(self.nextPictureCallback, 
+                    loop_counter, person_image))
 
                 layout_names = BoxLayout(orientation='horizontal', 
                     pos_hint={'x':.1, 'y':.6}, size_hint=(.8,.1))
                 lbl_names = Label(text=member.getName(1) + " " + '[i]' + 
-                    member.getName(2) + '[/i]' + " " + member.getName(3), markup=True, 
-                    font_size='40dp')
+                    member.getName(2) + '[/i]' + " " + member.getName(3), 
+                    markup=True, font_size='40dp')
                 layout_names.add_widget(lbl_names)
 
-                btn_statement = Button(text=member.getNextStatement(), font_size='25dp', background_normal='', background_color=rgba(0,0,0,0),
+                btn_statement = Button(text=member.getNextStatement(), 
+                    font_size='25dp', background_normal='', 
+                    background_color=rgba(0,0,0,0),
                     pos_hint={'x':.1, 'y':.2}, size_hint=(.8,.4))
 
-                btn_statement.bind(on_press=partial(self.nextStatementCallback, loop_counter, btn_statement))
+                btn_statement.bind(on_press=partial(self.nextStatementCallback, 
+                    loop_counter, btn_statement))
 
-                lbl_birthday = Label(text=member.getBirthday(), font_size='20dp', 
-                    pos_hint={'x':.2, 'bottom':1}, size_hint=(.6,.1))
+                lbl_birthday = Label(text=member.getBirthday(), 
+                    font_size='20dp', pos_hint={'x':.2, 'bottom':1}, 
+                    size_hint=(.6,.1))
 
-                #adding a vertical row of buttons to quickly navigate to specific members
-                layout_scroller = BoxLayout(orientation='vertical', pos_hint={'right':1, 'bottom':1}, size_hint=(.1,1))
+                #adding a vertical row of buttons to quickly navigate to 
+                # specific members
+                layout_scroller = BoxLayout(orientation='vertical', 
+                    pos_hint={'right':1, 'bottom':1}, size_hint=(.1,1))
 
-                #using a counter var for the position of the members in their array
+                #using a counter var for the position of the members in 
+                # their array
                 count = 0
 
                 #looping through the members and creating a button for each one
                 for member_btn in self.members:
-                    #if we are on the specific slide of a member the specific button should be colored accordingly
+                    #if we are on the specific slide of a member the specific 
+                    # button should be colored accordingly
                     if member.getName(1) == member_btn.getName(1):
-                        tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='25dp', background_color=rgba(0,0,0,0))
+                        tmp_button = Button(text=member_btn.getName(1), 
+                            id='btnJump' + member_btn.getName(1), 
+                            font_size='25dp', background_color=rgba(0,0,0,0))
                     else:
-                        tmp_button = Button(text=member_btn.getName(1), id='btnJump' + member_btn.getName(1), font_size='25dp', background_normal = '', background_color=rgba('0F0F0F'))
+                        tmp_button = Button(text=member_btn.getName(1), 
+                            id='btnJump' + member_btn.getName(1), 
+                            font_size='25dp', background_normal = '', 
+                            background_color=rgba('0F0F0F'))
 
                     tmp_button.bind(on_press=partial(self.jumpToMember, count))
                     layout_scroller.add_widget(tmp_button)
@@ -157,12 +200,17 @@ class BierlaApp(App):
         #either way we add the newly created members_carousel to the main one
         self.main_carousel.add_widget(self.members_carousel)
 
-    #creating the popup that lets the user select the path to the apps datafiles
+    ############################################################################
+    # showing the new popup to chose the filepath where the app should look for 
+    # its data
+    ############################################################################
     def showSetFilepathPopup(self, instance):
         popup_layout = FloatLayout()
 
-        self.file_chooser = FileChooserIconView(pos_hint={'x':0,'top':1}, size_hint=(1,.9))
-        select_button = Button(text="select", pos_hint={'x':.4, 'bottom':.5}, size_hint=(.2,.1))
+        self.file_chooser = FileChooserIconView(pos_hint={'x':0,'top':1}, 
+            size_hint=(1,.9))
+        select_button = Button(text="select", pos_hint={'x':.4, 'bottom':.5}, 
+            size_hint=(.2,.1))
         select_button.bind(on_press=self.saveSelectedPath)
 
         popup_layout.add_widget(self.file_chooser)
@@ -172,7 +220,9 @@ class BierlaApp(App):
             content=popup_layout, size_hint=(.9,.9))
         self.popup.open()
 
-    #callback for button on selectpath popup
+    ############################################################################
+    # callback for the button that confirms the selection of the apps path
+    ############################################################################
     def saveSelectedPath(self, instance):
         path = self.file_chooser.path
 
@@ -189,8 +239,11 @@ class BierlaApp(App):
         #refreshing membersarry
         self.refreshMembers()
 
-    #used to refresh the whole members array and all connected attributes. Automatically called 
-    # after path changed and start. Also callback for refresh button in settings
+    ############################################################################
+    # used to refresh the whole members array and all connected attributes. 
+    # Automatically called after path changed and start. 
+    # Also callback for refresh button in settings
+    ############################################################################
     def refreshMembers(self):
         #refreshing the members array
         self.members.clear()
@@ -199,22 +252,35 @@ class BierlaApp(App):
         self.buildMembersCarousel()
 
         #setting the label that counts detected members
-        self.lbl_members_count.text = "currently " + str(len(self.members)) + " members detected"
+        self.lbl_members_count.text = ("currently " + 
+            str(len(self.members)) + " members detected")
 
-    #used as a direct callback because button gives 2 positional arguments
+    ############################################################################
+    # direct callback for refresh button
+    # TODO: Change with the other method "partial"
+    ############################################################################
     def refreshCallback(self,instance):
         self.refreshMembers()      
 
-    #jumping to a specific member in the carousel, where member number defines the number in the array
+    ############################################################################
+    # jumping to a specific member in the carousel, where member number 
+    # defines the number in the array
+    ############################################################################
     def jumpToMember(self, memberNumber, instance):
-        #needed +2 cause there currently is an extra page at loading + one based numbering is used
         self.members_carousel.index = memberNumber 
-        pass
 
+    ############################################################################
+    # callback fot the next statement Label/Button that changes to the next
+    # next statement
+    ############################################################################
     #on tap on the label, the next statement of a member is displayed
     def nextStatementCallback(self, memberNumber, label, instance):
         label.text = self.members[memberNumber].getNextStatement()
 
+    ############################################################################
+    # callback fot the next picture Label/Button that changes to the next
+    # next picture
+    ############################################################################
     def nextPictureCallback(self, memberNumber, image, instance):
         image.source = self.members[memberNumber].getNextPicture()
 
