@@ -121,7 +121,7 @@ class BierlaApp(App):
         #checking if there are members in the array, if not creating a 
         #page showing that there are no members detected
         if len(self.members) == 0:
-            no_members_label = Label(text="No members found", font_size='50dp')
+            no_members_label = Label(text="No members found", font_size='20sp')
             self.members_carousel.add_widget(no_members_label)
         else:
             loop_counter = 0
@@ -144,11 +144,11 @@ class BierlaApp(App):
                     pos_hint={'x':.1, 'y':.6}, size_hint=(.8,.1))
                 lbl_names = Label(text=member.getName(1) + " " + '[i]' + 
                     member.getName(2) + '[/i]' + " " + member.getName(3), 
-                    markup=True, font_size='40dp')
+                    markup=True, font_size='20sp')
                 layout_names.add_widget(lbl_names)
 
                 btn_statement = Button(text=member.getNextStatement(), 
-                    font_size='25dp', background_normal='', 
+                    font_size='15sp', background_normal='', 
                     background_color=rgba(0,0,0,0),
                     pos_hint={'x':.1, 'y':.2}, size_hint=(.8,.4))
 
@@ -156,7 +156,7 @@ class BierlaApp(App):
                     loop_counter, btn_statement))
 
                 lbl_birthday = Label(text=member.getBirthday(), 
-                    font_size='20dp', pos_hint={'x':.2, 'bottom':1}, 
+                    font_size='15sp', pos_hint={'x':.2, 'bottom':1}, 
                     size_hint=(.6,.1))
 
                 #adding a vertical row of buttons to quickly navigate to 
@@ -175,11 +175,11 @@ class BierlaApp(App):
                     if member.getName(1) == member_btn.getName(1):
                         tmp_button = Button(text=member_btn.getName(1), 
                             id='btnJump' + member_btn.getName(1), 
-                            font_size='25dp', background_color=rgba(0,0,0,0))
+                            font_size='10sp', background_color=rgba(0,0,0,0))
                     else:
                         tmp_button = Button(text=member_btn.getName(1), 
                             id='btnJump' + member_btn.getName(1), 
-                            font_size='25dp', background_normal = '', 
+                            font_size='10sp', background_normal = '', 
                             background_color=rgba('0F0F0F'))
 
                     tmp_button.bind(on_press=partial(self.jumpToMember, count))
