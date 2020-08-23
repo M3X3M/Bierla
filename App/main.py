@@ -12,6 +12,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.button import Button
 from kivy.storage.jsonstore import JsonStore
+from kivy.utils import platform
 
 from member import Member
 from error import Error
@@ -22,6 +23,16 @@ import json
 
 # very important see documentation
 kivy.require("1.11.1")
+
+if platform == 'android':
+    from android.permissions import request_permissions, Permission
+    request_permissions([
+        Permission.WRITE_EXTERNAL_STORAGE,
+        Permission.READ_EXTERNAL_STORAGE,
+        Permission.INTERNET,
+    ])
+    from android.storage import primary_external_storage_path
+    primary_ext_storage = primary_external_storage_path()
 
 class DesignElements(Widget):
     pass
@@ -115,14 +126,14 @@ class BierlaApp(App):
         #removing the memberscarousel from the main one to rebuild it properly
         self.main_carousel.remove_widget(self.members_carousel)
 
-        #removing all contend from the current members carousel
-        self.members_carousel.clear_widgets()
+        self.members_carousel = Carousel(direction='bottom', loop='True')
 
         #checking if there are members in the array, if not creating a 
         #page showing that there are no members detected
         if len(self.members) == 0:
             no_members_label = Label(text="No members found", font_size='20sp')
             self.members_carousel.add_widget(no_members_label)
+
         else:
             loop_counter = 0
             for member in self.members:
@@ -175,11 +186,11 @@ class BierlaApp(App):
                     if member.getName(1) == member_btn.getName(1):
                         tmp_button = Button(text=member_btn.getName(1), 
                             id='btnJump' + member_btn.getName(1), 
-                            font_size='10sp', background_color=rgba(0,0,0,0))
+                            font_size='5sp', background_color=rgba(0,0,0,0))
                     else:
                         tmp_button = Button(text=member_btn.getName(1), 
                             id='btnJump' + member_btn.getName(1), 
-                            font_size='10sp', background_normal = '', 
+                            font_size='5sp', background_normal = '', 
                             background_color=rgba('0F0F0F'))
 
                     tmp_button.bind(on_press=partial(self.jumpToMember, count))
@@ -196,6 +207,7 @@ class BierlaApp(App):
                 self.members_carousel.add_widget(layout)
 
                 loop_counter = loop_counter + 1
+
         
         #either way we add the newly created members_carousel to the main one
         self.main_carousel.add_widget(self.members_carousel)
@@ -207,8 +219,12 @@ class BierlaApp(App):
     def showSetFilepathPopup(self, instance):
         popup_layout = FloatLayout()
 
-        self.file_chooser = FileChooserIconView(pos_hint={'x':0,'top':1}, 
-            size_hint=(1,.9))
+        if platform == 'android':
+            self.file_chooser = FileChooserIconView(pos_hint={'x':0,'top':1}, 
+               size_hint=(1,.9), path=primary_ext_storage)
+        else:
+            self.file_chooser = FileChooserIconView(pos_hint={'x':0,'top':1}, 
+               size_hint=(1,.9))
         select_button = Button(text="select", pos_hint={'x':.4, 'bottom':.5}, 
             size_hint=(.2,.1))
         select_button.bind(on_press=self.saveSelectedPath)
@@ -233,11 +249,11 @@ class BierlaApp(App):
         #refreshing the label showing the current path
         self.lbl_file_path.text = path
 
-        #closing the popup
-        self.popup.dismiss()
-
         #refreshing membersarry
         self.refreshMembers()
+
+        #closing the popup
+        self.popup.dismiss()
 
     ############################################################################
     # used to refresh the whole members array and all connected attributes. 
@@ -260,7 +276,7 @@ class BierlaApp(App):
     # TODO: Change with the other method "partial"
     ############################################################################
     def refreshCallback(self,instance):
-        self.refreshMembers()      
+        self.refreshMembers()    
 
     ############################################################################
     # jumping to a specific member in the carousel, where member number 
