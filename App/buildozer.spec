@@ -94,7 +94,7 @@ android.presplash_color = #0A5E00
 #android.api = 27
 
 # (int) Minimum API your APK will support.
-android.minapi = 20
+#android.minapi = 20
 
 # (int) Android SDK version to use
 #android.sdk = 20
