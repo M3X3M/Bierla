@@ -136,3 +136,4 @@ AppData.json
 # builds from buildozer
 .buildozer/
 bin/
+App/buildozer.spec
