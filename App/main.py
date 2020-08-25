@@ -37,7 +37,7 @@ if platform == 'android':
 class DesignElements(Widget):
     pass
 
-class BierlaApp(App):
+class ForFriendsApp(App):
 
     ############################################################################
     # first function called in when the program is launched. It is used to 
@@ -301,4 +301,4 @@ class BierlaApp(App):
         image.source = self.members[memberNumber].getNextPicture()
 
 if __name__ == '__main__':
-    BierlaApp().run()
+    ForFriendsApp().run()

@@ -1,7 +1,7 @@
-# Bierla App V3
+# ForFriends
 ## Information:
-The newest Bierla App is built using Python and the [Kivy](https://kivy.org/#home) library. As you can see here it is open source software, which means anyone can adapt and use this app as he wishes. I will slowly add all the mandatory to know things to join the developement for this app in this readme file.  
-If you are not familiar with the Bierla, we are just a group of friends. For fun I decided to create an application for us. At the moment all the application does is displaying images, statements and birthdays of our friends.  
+The ForFriends App is built using Python and the [Kivy](https://kivy.org/#home) library. As you can see here it is open source software, which means anyone can adapt and use this app as he wishes. I will slowly add all the mandatory to know things to join the developement for this app in this readme file.  
+This project started out because I wanted to create an app for me and my friends. At the moment all the application does is displaying images, statements and birthdays of our friends.  
 The aim for this app later on is that it helps managing our group by displaying events and managing polls, but this will still take a lot of time.  
 If you like the idea of a friend managing software feel free to join developement. Feel free to open issues and requests if you encounter anything.
 ## How to use:
