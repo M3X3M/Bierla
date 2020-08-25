@@ -1,10 +1,10 @@
 [app]
 
 # (str) Title of your application
-title = Bierla V3
+title = ForFriends
 
 # (str) Package name
-package.name = BierlaV3
+package.name = ForFriends
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = maxam.test
