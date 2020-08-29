@@ -22,11 +22,13 @@ from error import Error
 
 from functools import partial
 
+from animator import Animator
+
 import random
 
 import json
 
-# very important see documentation
+# needed for kivy, see requirements
 kivy.require("1.11.1")
 
 if platform == 'android':
@@ -60,6 +62,10 @@ class ForFriendsApp(App):
         self.btn_refresh_members = self.designElements.ids['btnRefreshMembers']
         self.lbl_members_count = self.designElements.ids['lblMembersCount']
         self.im_group_pic = self.designElements.ids['imGroup']
+        self.btn_next_group_pic = self.designElements.ids['btnNextGroup']
+
+        #binding the corresponding callback to the button
+        self.btn_next_group_pic.bind(on_press = partial(self.changeGroupPic))
 
         #the json store where permanent data is stored
         self.app_data_name = 'AppData.json'
@@ -84,7 +90,11 @@ class ForFriendsApp(App):
 
         self.getGroupPictures()
 
-        #setting the first image on the main page
+        #initialising the animator
+        self.animator = Animator()
+
+        #setting the first image on the main page and starting the animation 
+        # to animate the widget if there are multiple images
         if self.group_pictures == []:
             self.im_group_pic.source = "Resources/questionmark.png"
         elif len(self.group_pictures) == 1:
@@ -92,8 +102,7 @@ class ForFriendsApp(App):
         else:
             self.im_group_pic.source = self.group_pictures[0]
             self.last_group_picture_pos = 0
-            Clock.schedule_interval(self.fadeOutGroupPic, 10)
-            
+            self.group_loop_clock = Clock.schedule_once(self.changeGroupPic, 10)
 
         #kivy thing
         return self.designElements
@@ -320,7 +329,9 @@ class ForFriendsApp(App):
     # next picture
     ############################################################################
     def nextPictureCallback(self, memberNumber, image, instance):
-        image.source = self.members[memberNumber].getNextPicture()
+        self.animator.changePicture(image, 1, 
+            self.members[memberNumber].getNextPicture())
+        #image.source = self.members[memberNumber].getNextPicture()
 
     ############################################################################
     # building the array of available pictures in the all folder for the 
@@ -355,30 +366,29 @@ class ForFriendsApp(App):
 
     ############################################################################
     # callback for changing the picture on the main page. Called in intervals
+    # doing all the preperation to start use the animator to change the 
+    # picture with the according animation
     ############################################################################
-    def fadeOutGroupPic(self, instance):
-        fadeOutAnim = Animation(opacity = 0)
-        fadeOutAnim.bind(on_complete = partial(self.fadeInGroupPic))
-        fadeOutAnim.start(self.im_group_pic)
+    def changeGroupPic(self, instance):
+        #unscheduling the running clock (if there is one)
+        Clock.unschedule(self.group_loop_clock)
 
-    ############################################################################
-    # is called after the fade out of the group picture has finished
-    # it then changes the source of the image and fades it back in
-    ############################################################################
-    def fadeInGroupPic(self, a, b):
+        #picking a random number, which cannot be last number that has been 
+        # picked
         rand_num = self.pickRandomExcludingLast(0, len(self.group_pictures)-1, 
             self.last_group_picture_pos)
-        #setting the source of the picture by picking a random number that is 
-        # not the last picked one
-        self.im_group_pic.source = self.group_pictures[rand_num]
+        
+        #translating the number into a path of our array
+        new_path = self.group_pictures[rand_num]
 
-        #saving the index of the last used image
+        #resetting the last number
         self.last_group_picture_pos = rand_num
 
-        #fading back in the changed image
-        fadeInAnim = Animation(opacity = 1)
-        fadeInAnim.start(self.im_group_pic)
+        #completing the animation using the animator
+        self.animator.changePicture(self.im_group_pic, 2, new_path)
 
+        #scheduling the new clock to redo the whole animation
+        self.group_loop_clock = Clock.schedule_once(self.changeGroupPic, 10)
 
     ############################################################################
     # recursivly finding a random number in a specified range, one number from 
