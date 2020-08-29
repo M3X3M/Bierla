@@ -13,11 +13,16 @@ from kivy.uix.filechooser import FileChooserIconView
 from kivy.uix.button import Button
 from kivy.storage.jsonstore import JsonStore
 from kivy.utils import platform
+from kivy.uix.filechooser import FileSystemLocal
+from kivy.clock import Clock
+from kivy.animation import Animation
 
 from member import Member
 from error import Error
 
 from functools import partial
+
+import random
 
 import json
 
@@ -33,6 +38,9 @@ if platform == 'android':
     ])
     from android.storage import primary_external_storage_path
     primary_ext_storage = primary_external_storage_path()
+
+#TODO: Make config File
+GROUP_FOLDER = 'Group'
 
 class DesignElements(Widget):
     pass
@@ -51,6 +59,7 @@ class ForFriendsApp(App):
         self.lbl_file_path = self.designElements.ids['lblFilePath']
         self.btn_refresh_members = self.designElements.ids['btnRefreshMembers']
         self.lbl_members_count = self.designElements.ids['lblMembersCount']
+        self.im_group_pic = self.designElements.ids['imGroup']
 
         #the json store where permanent data is stored
         self.app_data_name = 'AppData.json'
@@ -72,6 +81,19 @@ class ForFriendsApp(App):
 
         #initialising the errors class // Not Functional at the moment
         self.error = Error()
+
+        self.getGroupPictures()
+
+        #setting the first image on the main page
+        if self.group_pictures == []:
+            self.im_group_pic.source = "Resources/questionmark.png"
+        elif len(self.group_pictures) == 1:
+            self.im_group_pic.source = self.group_pictures[0]
+        else:
+            self.im_group_pic.source = self.group_pictures[0]
+            self.last_group_picture_pos = 0
+            Clock.schedule_interval(self.fadeOutGroupPic, 10)
+            
 
         #kivy thing
         return self.designElements
@@ -299,6 +321,77 @@ class ForFriendsApp(App):
     ############################################################################
     def nextPictureCallback(self, memberNumber, image, instance):
         image.source = self.members[memberNumber].getNextPicture()
+
+    ############################################################################
+    # building the array of available pictures in the all folder for the 
+    # "featured" pictures on the main page
+    ############################################################################
+    def getGroupPictures(self):
+        #creating an array holding all the paths
+        self.group_pictures = []
+        file_system = FileSystemLocal()
+
+        try:
+            # this returns a list of files in dir
+            files = file_system.listdir(self.current_selected_path + '/' + 
+                GROUP_FOLDER)
+
+        except:
+            # returnung an empty array
+            files = []
+
+            #DEBUG:
+            print("no folder")
+
+        #adding all .jpg or png files to the pictures array
+        for file in files:
+            #checking filetype
+            if file[-4:] == '.jpg' or file[-4:] == '.png':
+                complete_filepath = (self.current_selected_path + '/' + 
+                    GROUP_FOLDER + '/' + file)
+                self.group_pictures.append(complete_filepath)
+
+        print(self.group_pictures)
+
+    ############################################################################
+    # callback for changing the picture on the main page. Called in intervals
+    ############################################################################
+    def fadeOutGroupPic(self, instance):
+        fadeOutAnim = Animation(opacity = 0)
+        fadeOutAnim.bind(on_complete = partial(self.fadeInGroupPic))
+        fadeOutAnim.start(self.im_group_pic)
+
+    ############################################################################
+    # is called after the fade out of the group picture has finished
+    # it then changes the source of the image and fades it back in
+    ############################################################################
+    def fadeInGroupPic(self, a, b):
+        rand_num = self.pickRandomExcludingLast(0, len(self.group_pictures)-1, 
+            self.last_group_picture_pos)
+        #setting the source of the picture by picking a random number that is 
+        # not the last picked one
+        self.im_group_pic.source = self.group_pictures[rand_num]
+
+        #saving the index of the last used image
+        self.last_group_picture_pos = rand_num
+
+        #fading back in the changed image
+        fadeInAnim = Animation(opacity = 1)
+        fadeInAnim.start(self.im_group_pic)
+
+
+    ############################################################################
+    # recursivly finding a random number in a specified range, one number from 
+    # the range is excluded for example for avoiding picking the last picked 
+    # one
+    ############################################################################
+    def pickRandomExcludingLast(self, rangeStart, rangeEnd, exclusion):
+        random_num = random.randint(rangeStart, rangeEnd)
+        if random_num == exclusion:
+            random_num = self.pickRandomExcludingLast(rangeStart, rangeEnd, 
+                exclusion)
+        
+        return random_num
 
 if __name__ == '__main__':
     ForFriendsApp().run()

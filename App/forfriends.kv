@@ -23,8 +23,15 @@
                 Image:
                     source: 'Resources/OfficialLogo.png'
                     pos_hint: {'x':.1, 'top':1}
-                    size_hint:(.8,.8)
+                    size_hint:(.8,.4)
                     allow_stretch: 'True'
+
+                Image:
+                    source: 'Resources/questionmark.png'
+                    pos_hint: {'x':.1, 'center_y':.3}
+                    size_hint:(.8,.35)
+                    allow_stretch: 'True'
+                    id: imGroup
 
                 Label:
                     text: "Welcome to the ForFriends App"
