@@ -18,6 +18,10 @@ class Member:
             return
 
         self.birthday = birthday
+
+        self.birth_day = self.birthday[0:2]
+
+        self.birth_month = self.birthday[3:5]
         
         self.pictures = []
         self.findPictures(path)
@@ -99,3 +103,9 @@ class Member:
             if file[-4:] == '.jpg' or file[-4:] == '.png':
                 complete_filepath = path + '/' + self.first_name + '/' + file
                 self.pictures.append(complete_filepath)
+
+    def getBirthdayDay(self):
+        return self.birth_day
+
+    def getBirthdayMonth(self):
+        return self.birth_month

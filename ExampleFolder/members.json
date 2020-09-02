@@ -3,7 +3,7 @@
         "firstname" : "firstname",
         "middlename" : "middlename",
         "lastname" : "lastname",
-        "birthday" : "1.1.1900",
+        "birthday" : "01.01.1900",
         "statements" : [
             "multiple",
             "statements"
@@ -13,7 +13,7 @@
         "firstname" : "Max",
         "middlename" : "Mili",
         "lastname" : "Mustermann",
-        "birthday" : "13.4.1000",
+        "birthday" : "13.04.1000",
         "statements" : [
             "single statement"
         ]
@@ -22,7 +22,7 @@
         "firstname" : "Another",
         "middlename" : "Test",
         "lastname" : "Person",
-        "birthday" : "30.1.9999",
+        "birthday" : "30.01.9999",
         "statements" : null
     }
 ]

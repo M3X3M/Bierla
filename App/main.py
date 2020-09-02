@@ -22,6 +22,8 @@ from error import Error
 
 from functools import partial
 
+from datetime import date
+
 from animator import Animator
 
 import random
@@ -103,6 +105,9 @@ class ForFriendsApp(App):
             self.im_group_pic.source = self.group_pictures[0]
             self.last_group_picture_pos = 0
             self.group_loop_clock = Clock.schedule_once(self.changeGroupPic, 10)
+
+        #DEBUG
+        self.getNextBirthday(self.members)
 
         #kivy thing
         return self.designElements
@@ -402,6 +407,29 @@ class ForFriendsApp(App):
                 exclusion)
         
         return random_num
+
+    ############################################################################
+    # searching for the birthday that is closest in the future to the current
+    # date
+    ############################################################################
+    def getNextBirthday(self, membersArray):
+        current_day = date.today().strftime('%d')
+        current_month = date.today().strftime('%m')
+
+        top_difference_to_Month = 12
+        #postion of for loop
+        memberIndex = 0
+
+        closestMember = membersArray[0]
+        for member in membersArray:
+            birth_month = member.getBirthdayMonth
+            birth_day = member.getBirthdayDay
+
+            #birthday is this year
+            difference_to_month = current_month - birth_month
+                
+
+            memberIndex = memberIndex + 1
 
 if __name__ == '__main__':
     ForFriendsApp().run()
