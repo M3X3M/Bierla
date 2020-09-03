@@ -65,6 +65,7 @@ class ForFriendsApp(App):
         self.lbl_members_count = self.designElements.ids['lblMembersCount']
         self.im_group_pic = self.designElements.ids['imGroup']
         self.btn_next_group_pic = self.designElements.ids['btnNextGroup']
+        self.lbl_news = self.designElements.ids['lblNews']
 
         #binding the corresponding callback to the button
         self.btn_next_group_pic.bind(on_press = partial(self.changeGroupPic))
@@ -105,9 +106,13 @@ class ForFriendsApp(App):
             self.im_group_pic.source = self.group_pictures[0]
             self.last_group_picture_pos = 0
             self.group_loop_clock = Clock.schedule_once(self.changeGroupPic, 10)
-
-        #DEBUG
-        self.getNextBirthday(self.members)
+        
+        #setting the news array
+        self.buildNews()
+        #setting the first position of news Text is 0 ("Welcome")
+        self.last_news_pos = 0
+        #setting a clock to change news
+        self.news_loop_clock = Clock.schedule_once(self.updateNewsLabel, 7)
 
         #kivy thing
         return self.designElements
@@ -413,23 +418,101 @@ class ForFriendsApp(App):
     # date
     ############################################################################
     def getNextBirthday(self, membersArray):
-        current_day = date.today().strftime('%d')
-        current_month = date.today().strftime('%m')
+        #getting the values for the current date seperatly forced to int
+        current_day = int(date.today().strftime('%d'))
+        current_month = int(date.today().strftime('%m'))
+        current_year = int(date.today().strftime('%Y'))
 
-        top_difference_to_Month = 12
+        #building the date
+        current_date = date(current_year, current_month, current_day)
+
+        #currently closest in days
+        closest_days = 365
+        
         #postion of for loop
-        memberIndex = 0
+        member_index = 0
 
-        closestMember = membersArray[0]
+        closest_member = membersArray[0]
+
         for member in membersArray:
-            birth_month = member.getBirthdayMonth
-            birth_day = member.getBirthdayDay
+            birth_month = int(member.getBirthdayMonth())
+            birth_day = int(member.getBirthdayDay())
 
-            #birthday is this year
-            difference_to_month = current_month - birth_month
-                
+            #we now need to check what year we add to the birthday in order to 
+            # calculate the correct amount of days that each birthday is away
+            # from the current date
+             
+            # if the month is smaller it will set it to next year
+            if int(birth_month) < current_month:
+                birthdate_whole = date(current_year + 1, int(birth_month), 
+                    int(birth_day))
 
-            memberIndex = memberIndex + 1
+            # if the month is bigger it will set it to this year
+            elif int(birth_month) > current_month:
+                birthdate_whole = date(current_year, int(birth_month), 
+                    int(birth_day))
+
+            # if the month is equal we check the days
+            else:
+                #if the day is smaller it will set it to next year
+                if int(birth_day) < current_day:
+                    birthdate_whole = date(current_year + 1, int(birth_month), 
+                        int(birth_day))
+
+                # if the day is bigger or equal it will set it to this year
+                else:
+                    birthdate_whole = date(current_year, int(birth_month), 
+                        int(birth_day))
+
+            #we use the datetime library to calculate the amount of days between 
+            # the dates
+            delta = birthdate_whole - current_date
+            
+            #if the current members birthday is less days away, we set it to the 
+            # closest members birthday
+            if delta.days < closest_days:
+                closest_days = delta.days
+                closest_member = membersArray[member_index]
+
+
+            member_index = member_index + 1
+
+        #returning the member with the closest birthdate
+        return closest_member
+
+    ############################################################################
+    # building the array of different news to display on the main page
+    ############################################################################
+    def buildNews(self):
+        birthday_member = self.getNextBirthday(self.members)
+
+        birthdayText = ("Next birthday: " + birthday_member.getBirthdayDay() + 
+            "." + birthday_member.getBirthdayMonth() + "(" + 
+            birthday_member.getName(1) + ")")
+
+        self.news_array = ["Welcome!", birthdayText]
+
+    ############################################################################
+    # updating the news label
+    ############################################################################
+    def updateNewsLabel(self, instance):
+        #unscheduling the running clock (if there is one)
+        Clock.unschedule(self.news_loop_clock)
+
+        rand_num = self.pickRandomExcludingLast(0, len(self.news_array)-1, 
+            self.last_news_pos)
+
+        #translating the number into a text of our array
+        new_text = self.news_array[rand_num]
+
+        #resetting the last number
+        self.last_news_pos = rand_num
+
+        #completing the animation using the animator
+        self.animator.changeText(self.lbl_news, 2, new_text) 
+
+        #scheduling the new clock to redo the whole animation
+        self.news_loop_clock = Clock.schedule_once(self.updateNewsLabel, 10)
 
 if __name__ == '__main__':
     ForFriendsApp().run()
