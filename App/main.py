@@ -111,8 +111,10 @@ class ForFriendsApp(App):
         self.buildNews()
         #setting the first position of news Text is 0 ("Welcome")
         self.last_news_pos = 0
-        #setting a clock to change news
-        self.news_loop_clock = Clock.schedule_once(self.updateNewsLabel, 7)
+
+        #setting a clock to change news (if we have more than 1)
+        if len(self.news_array) > 1:
+            self.news_loop_clock = Clock.schedule_once(self.updateNewsLabel, 7)
 
         #kivy thing
         return self.designElements
@@ -484,13 +486,19 @@ class ForFriendsApp(App):
     # building the array of different news to display on the main page
     ############################################################################
     def buildNews(self):
-        birthday_member = self.getNextBirthday(self.members)
+        self.news_array = []
+        self.news_array.append("Welcome!")
 
-        birthdayText = ("Next birthday: " + birthday_member.getBirthdayDay() + 
-            "." + birthday_member.getBirthdayMonth() + " (" + 
-            birthday_member.getName(1) + ")")
+        # checking if the membersarray is empty first
+        if self.members != []:
+            birthday_member = self.getNextBirthday(self.members)
 
-        self.news_array = ["Welcome!", birthdayText]
+            birthday_text = ("Next birthday: " + birthday_member.getBirthdayDay() + 
+                "." + birthday_member.getBirthdayMonth() + " (" + 
+                birthday_member.getName(1) + ")")
+
+            self.news_array.append(birthday_text)
+
 
     ############################################################################
     # updating the news label
