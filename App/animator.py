@@ -27,7 +27,7 @@ class Animator():
     # @text the new text
     ############################################################################
     def changeText(self, widget, duration, text):
-        self.fadeOutAnimImage(widget, duration/2 , text)
+        self.fadeOutAnimLabel(widget, duration/2 , text)
 
 
     ############################################################################

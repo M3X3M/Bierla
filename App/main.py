@@ -487,7 +487,7 @@ class ForFriendsApp(App):
         birthday_member = self.getNextBirthday(self.members)
 
         birthdayText = ("Next birthday: " + birthday_member.getBirthdayDay() + 
-            "." + birthday_member.getBirthdayMonth() + "(" + 
+            "." + birthday_member.getBirthdayMonth() + " (" + 
             birthday_member.getName(1) + ")")
 
         self.news_array = ["Welcome!", birthdayText]
