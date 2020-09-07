@@ -26,6 +26,8 @@ from datetime import date
 
 from animator import Animator
 
+import widget_builder
+
 import random
 
 import json
@@ -66,6 +68,7 @@ class ForFriendsApp(App):
         self.im_group_pic = self.designElements.ids['imGroup']
         self.btn_next_group_pic = self.designElements.ids['btnNextGroup']
         self.lbl_news = self.designElements.ids['lblNews']
+        self.btn_testPopup = self.designElements.ids['btn_testPopup']
 
         #binding the corresponding callback to the button
         self.btn_next_group_pic.bind(on_press = partial(self.changeGroupPic))
@@ -79,6 +82,7 @@ class ForFriendsApp(App):
         #binding buttons with their callbacks
         self.btn_set_file_path.bind(on_press=self.showSetFilepathPopup)
         self.btn_refresh_members.bind(on_press=self.refreshCallback)
+        self.btn_testPopup.bind(on_press=self.testRule)
 
         #loading the currently stored data (if there is any)
         self.loadDataPath()
@@ -521,6 +525,16 @@ class ForFriendsApp(App):
 
         #scheduling the new clock to redo the whole animation
         self.news_loop_clock = Clock.schedule_once(self.updateNewsLabel, 10)
+
+    ############################################################################
+    # testing out the rule detailed view
+    ############################################################################
+    def testRule(self, *args):
+        popup_layout = widget_builder.buildMemberView("Header", 1, "Hello this is a rule")
+
+        popup = Popup(title='Hi', content=popup_layout, size_hint=(.9,.9))
+        popup.open()
+
 
 if __name__ == '__main__':
     ForFriendsApp().run()
