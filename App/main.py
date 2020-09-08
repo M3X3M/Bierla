@@ -16,9 +16,11 @@ from kivy.utils import platform
 from kivy.uix.filechooser import FileSystemLocal
 from kivy.clock import Clock
 from kivy.animation import Animation
+from kivy.uix.modalview import ModalView
 
 from member import Member
 from error import Error
+from rule import Rule
 
 from functools import partial
 
@@ -68,7 +70,13 @@ class ForFriendsApp(App):
         self.im_group_pic = self.designElements.ids['imGroup']
         self.btn_next_group_pic = self.designElements.ids['btnNextGroup']
         self.lbl_news = self.designElements.ids['lblNews']
-        self.btn_testPopup = self.designElements.ids['btn_testPopup']
+        self.lay_rules = self.designElements.ids['layRules']
+
+        rules = []
+        for i in range(1, 100):
+            rules.append(Rule("test", i, "text"))
+
+        widget_builder.buildRules(rules, self.lay_rules)
 
         #binding the corresponding callback to the button
         self.btn_next_group_pic.bind(on_press = partial(self.changeGroupPic))
@@ -82,7 +90,6 @@ class ForFriendsApp(App):
         #binding buttons with their callbacks
         self.btn_set_file_path.bind(on_press=self.showSetFilepathPopup)
         self.btn_refresh_members.bind(on_press=self.refreshCallback)
-        self.btn_testPopup.bind(on_press=self.testRule)
 
         #loading the currently stored data (if there is any)
         self.loadDataPath()
@@ -530,10 +537,11 @@ class ForFriendsApp(App):
     # testing out the rule detailed view
     ############################################################################
     def testRule(self, *args):
-        popup_layout = widget_builder.buildMemberView("Header", 1, "Hello this is a rule")
+        popup_layout = widget_builder.buildRuleView("Header", 1, "Hello this is a rule#############################################################################################################################################################")
 
-        popup = Popup(title='Hi', content=popup_layout, size_hint=(.9,.9))
-        popup.open()
+        rule_view = ModalView(size_hint = (.9,.9), background = "Resources/darktransparent", background_color=rgba('#0a5e00'))
+        rule_view.add_widget(popup_layout)
+        rule_view.open()
 
 
 if __name__ == '__main__':

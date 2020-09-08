@@ -47,14 +47,17 @@
                     size_hint:(.8,.2)
                     id: lblNews
 
-            FloatLayout:
-                size: root.width, root.height
-
-                Button:
-                    text: "Test Popup"
-                    id: btn_testPopup
-                    background_normal: ""
-                    background_color: rgba('#0F0F0F')
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                GridLayout:
+                    id: layRules
+                    cols: 1
+                    size_hint_y: None
+                    spacing: 10
+                    padding: 10
+                    height: self.minimum_height
+                    
 
             FloatLayout:
                 size: root.width, root.height
