@@ -1,0 +1,12 @@
+[
+	{
+		"id":"1",
+		"name":"rule1",
+		"text":"this is a test rule"
+	},
+	{
+		"id":"2b",
+		"name":"another one",
+		"text":"write rules or other things you want to list here"
+	}
+]

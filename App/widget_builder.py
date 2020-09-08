@@ -37,7 +37,7 @@ def buildRules(rules, widget):
         btn_id = Button(text = str(rule.id) + "." + 10*" " + rule.getName(), 
             font_size = "20sp", size_hint_y=None, 
             pos_hint={"x":0, "top":top_lbl_id}, height=75,
-            background_normal="Rescources/darktransparent",
+            background_normal="Resources/darktransparent",
             background_color=rgba('#0a5e00'))
 
         btn_id.bind(on_press = partial(buildRuleView, rule))
@@ -62,6 +62,6 @@ def buildRuleView(rule, *args):
     main_layout.add_widget(header)
     main_layout.add_widget(body)
 
-    rule_view = ModalView(size_hint = (.9,.9), background = "Resources/darktransparent", background_color=rgba('#0a5e00'))
+    rule_view = ModalView(size_hint = (.95,.98), background = "Resources/darktransparent", background_color=rgba('#0a5e00'))
     rule_view.add_widget(main_layout)
     rule_view.open()

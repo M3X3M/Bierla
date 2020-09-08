@@ -21,6 +21,7 @@ from kivy.uix.modalview import ModalView
 from member import Member
 from error import Error
 from rule import Rule
+import rule
 
 from functools import partial
 
@@ -72,12 +73,6 @@ class ForFriendsApp(App):
         self.lbl_news = self.designElements.ids['lblNews']
         self.lay_rules = self.designElements.ids['layRules']
 
-        rules = []
-        for i in range(1, 60):
-            rules.append(Rule("test", i, "text"))
-
-        widget_builder.buildRules(rules, self.lay_rules)
-
         #the json store where permanent data is stored
         self.app_data_name = 'AppData.json'
 
@@ -124,6 +119,10 @@ class ForFriendsApp(App):
         #setting a clock to change news (if we have more than 1)
         if len(self.news_array) > 1:
             self.news_loop_clock = Clock.schedule_once(self.updateNewsLabel, 7)
+
+        #building the rules page
+        rules = rule.scanRules(self.current_selected_path + '/rules.json')
+        widget_builder.buildRules(rules, self.lay_rules)
 
         #kivy thing
         return self.designElements

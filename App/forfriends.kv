@@ -47,16 +47,28 @@
                     size_hint:(.8,.2)
                     id: lblNews
 
-            ScrollView:
-                do_scroll_x: False
-                do_scroll_y: True
-                GridLayout:
-                    id: layRules
-                    cols: 1
-                    size_hint_y: None
-                    spacing: 10
-                    padding: 10
-                    height: self.minimum_height*1.5
+            RelativeLayout:
+                Label:
+                    text: "Rules"
+                    pos_hint: {"center_y":.975,"center_x":.5}
+                    size_hint_x: .8
+                    size_hint_y: .1
+                    font_size: '40sp'
+
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    size_hint_x: .8
+                    size_hint_y: .9
+                    pos_hint: {"center_y":.5,"center_x":.5}
+                    GridLayout:
+                        id: layRules
+                        cols: 1
+                        size_hint_x: 1
+                        size_hint_y: None
+                        spacing: 10
+                        padding: 10
+                        height: self.minimum_height*1.4
                     
 
             FloatLayout:

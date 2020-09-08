@@ -1,3 +1,5 @@
+import json
+
 class Rule:
 ################################################################################
 # setting the membervars of the newly initialised class
@@ -41,3 +43,26 @@ class Rule:
     def setName(self, name):
         self.name = name
 
+
+################################################################################
+# scanning the given file for rules and returning an array of rules
+# returns empty array if there are none or there is an error
+################################################################################
+def scanRules(path):
+    rules = []
+    try:
+        with open(path, 'r') as file:
+            data = file.read()
+
+        rules_dict = json.loads(data)
+
+        for rule in rules_dict:
+            tmp_rule = Rule(rule['name'], rule['id'], rule['text'])
+            rules.append(tmp_rule)
+
+    except:
+        print('No rules')
+    
+    return rules
+
+        
