@@ -31,18 +31,28 @@ def buildRules(rules, widget):
 
     for rule in rules:
         #spacing in between rows
-        top_lbl_id -= .4
+        top_lbl_id -= 1.2
 
         row = FloatLayout(size_hint_y=None, height=50)
-        btn_id = Button(text = str(rule.id) + "." + 10*" " + rule.getName(), 
-            font_size = "20sp", size_hint_y=None, 
-            pos_hint={"x":0, "top":top_lbl_id}, height=75,
+        lbl_id = Label(text = str(rule.getId()), font_size = "20sp",
+            size_hint_y = None, pos_hint = {"center_x":.1, "top":top_lbl_id},
+            height = 100)
+
+        lbl_name = Label(text = rule.getName(), font_size = "20sp",
+            size_hint_y = None, size_hint_x = .6, 
+            pos_hint = {"x":.1, "top":top_lbl_id},
+            height = 100, halign = 'left')
+
+        btn = Button(text = "", size_hint_y=None, 
+            pos_hint={"x":0, "top":top_lbl_id}, height=100,
             background_normal="Resources/darktransparent",
             background_color=rgba('#0a5e00'))
 
-        btn_id.bind(on_press = partial(buildRuleView, rule))
+        btn.bind(on_press = partial(buildRuleView, rule))
 
-        row.add_widget(btn_id)
+        row.add_widget(btn)
+        row.add_widget(lbl_id)
+        row.add_widget(lbl_name)
 
         widget.add_widget(row)
 
