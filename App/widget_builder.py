@@ -4,6 +4,10 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.utils import rgba
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
+from kivy.uix.modalview import ModalView
+
+from functools import partial
 
 # see documentation
 kivy.require("1.11.1")
@@ -19,19 +23,26 @@ class WrappedLabel(Label):
             texture_size=lambda *x: self.setter('height')(self, self.texture_size[1]))
 
 ################################################################################
-# one row of a rule
+# filling the scrollview
 ################################################################################
 def buildRules(rules, widget):
-    top_lbl_id = 1.4
+    #starting position
+    top_lbl_id = .8
 
     for rule in rules:
-        top_lbl_id -= .4 
+        #spacing in between rows
+        top_lbl_id -= .4
 
-        row = FloatLayout(size_hint_y=None, height=25)
-        lbl_id = Label(text = str(rule.id), font_size = "20sp", size_hint_y=None, 
-            pos_hint={"x":0, "top":top_lbl_id})
+        row = FloatLayout(size_hint_y=None, height=50)
+        btn_id = Button(text = str(rule.id) + "." + 10*" " + rule.getName(), 
+            font_size = "20sp", size_hint_y=None, 
+            pos_hint={"x":0, "top":top_lbl_id}, height=75,
+            background_normal="Rescources/darktransparent",
+            background_color=rgba('#0a5e00'))
 
-        row.add_widget(lbl_id)
+        btn_id.bind(on_press = partial(buildRuleView, rule))
+
+        row.add_widget(btn_id)
 
         widget.add_widget(row)
 
@@ -39,19 +50,18 @@ def buildRules(rules, widget):
 ################################################################################
 # building the widget that holds the detailed view of a rule
 ################################################################################
-def buildRuleView(name, id, text):
+def buildRuleView(rule, *args):
     main_layout = FloatLayout()
 
-    header = Label(text=name, pos_hint={'center_x':.5, 'top':1}, 
+    header = Label(text=rule.getName(), pos_hint={'center_x':.5, 'top':1}, 
         size_hint=(.2,.1), font_size="30sp", bold=True, color = rgba('#0a5e00'))
 
-    body = WrappedLabel(text=text, font_size="20sp", 
+    body = WrappedLabel(text=rule.getText(), font_size="20sp", 
         pos_hint={'center_x':.5,'center_y':.8}, size_hint=(.9,.9))
 
     main_layout.add_widget(header)
     main_layout.add_widget(body)
 
-    return main_layout
-
-
-    
+    rule_view = ModalView(size_hint = (.9,.9), background = "Resources/darktransparent", background_color=rgba('#0a5e00'))
+    rule_view.add_widget(main_layout)
+    rule_view.open()

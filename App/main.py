@@ -73,13 +73,10 @@ class ForFriendsApp(App):
         self.lay_rules = self.designElements.ids['layRules']
 
         rules = []
-        for i in range(1, 100):
+        for i in range(1, 60):
             rules.append(Rule("test", i, "text"))
 
         widget_builder.buildRules(rules, self.lay_rules)
-
-        #binding the corresponding callback to the button
-        self.btn_next_group_pic.bind(on_press = partial(self.changeGroupPic))
 
         #the json store where permanent data is stored
         self.app_data_name = 'AppData.json'
@@ -90,6 +87,7 @@ class ForFriendsApp(App):
         #binding buttons with their callbacks
         self.btn_set_file_path.bind(on_press=self.showSetFilepathPopup)
         self.btn_refresh_members.bind(on_press=self.refreshCallback)
+        self.btn_next_group_pic.bind(on_press = partial(self.changeGroupPic))
 
         #loading the currently stored data (if there is any)
         self.loadDataPath()
