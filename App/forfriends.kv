@@ -47,13 +47,38 @@
                     size_hint:(.8,.2)
                     id: lblNews
 
-            RelativeLayout:
+            FloatLayout:
+                size: root.width, root.height
+                FloatLayout:
+                    pos_hint: {'x':.08, 'y':.075}
+                    size_hint: (.84,.85)
+                    canvas.before:
+                        Color:
+                            rgba: rgba('#000000')
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+
                 Label:
                     text: "Rules"
-                    pos_hint: {"center_y":.975,"center_x":.5}
+                    pos_hint: {"center_y":.97,"center_x":.5}
                     size_hint_x: .8
                     size_hint_y: .1
                     font_size: '40sp'
+
+                Image:
+                    source: "Resources/OfficialLogo.png"
+                    pos_hint: {"center_y":.96,"x":.1}
+                    size_hint: (.1,.08)
+                    allow_stretch: 'True'
+                    kee_ratio: 'False'
+
+                Image:
+                    source: "Resources/OfficialLogo.png"
+                    pos_hint: {"center_y":.96,"x":.8}
+                    size_hint: (.1,.08)
+                    allow_stretch: 'True'
+                    kee_ratio: 'False'
 
                 ScrollView:
                     do_scroll_x: False
@@ -61,6 +86,7 @@
                     size_hint_x: .8
                     size_hint_y: .9
                     pos_hint: {"center_y":.5,"center_x":.5}
+
                     GridLayout:
                         id: layRules
                         cols: 1
@@ -68,8 +94,6 @@
                         size_hint_y: None
                         spacing: 10
                         padding: 10
-                        height: self.minimum_height*1.4
-                    
 
             FloatLayout:
                 size: root.width, root.height

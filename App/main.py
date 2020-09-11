@@ -530,16 +530,5 @@ class ForFriendsApp(App):
         #scheduling the new clock to redo the whole animation
         self.news_loop_clock = Clock.schedule_once(self.updateNewsLabel, 10)
 
-    ############################################################################
-    # testing out the rule detailed view
-    ############################################################################
-    def testRule(self, *args):
-        popup_layout = widget_builder.buildRuleView("Header", 1, "Hello this is a rule#############################################################################################################################################################")
-
-        rule_view = ModalView(size_hint = (.9,.9), background = "Resources/darktransparent", background_color=rgba('#0a5e00'))
-        rule_view.add_widget(popup_layout)
-        rule_view.open()
-
-
 if __name__ == '__main__':
     ForFriendsApp().run()
