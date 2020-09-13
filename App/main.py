@@ -166,106 +166,25 @@ class ForFriendsApp(App):
             print('No path')
 
     ############################################################################
-    # TODO: Split further, methode is too long
     # rebuilding the memberscarousel from scratch by wiping the old one and 
-    # filling the new one with the current state of the members array. For the 
-    # different members there are different buttons so they need to by binded 
-    # to functions with some different attributes. The whole design of the 
-    # carousel is designed here
+    # filling the new one with the current state of the members array. The 
+    # widget builder does is used for building new carousel
     ############################################################################
     def buildMembersCarousel(self):
         #removing the memberscarousel from the main one to rebuild it properly
         self.main_carousel.remove_widget(self.members_carousel)
 
+        #refreshing the members carousel by reinitializing it
         self.members_carousel = Carousel(direction='bottom', loop='True')
-
-        #checking if there are members in the array, if not creating a 
-        #page showing that there are no members detected
-        if len(self.members) == 0:
-            no_members_label = Label(text="No members found", font_size='20sp')
-            self.members_carousel.add_widget(no_members_label)
-
-        else:
-            loop_counter = 0
-            for member in self.members:
-                #creating the layout that holds all the fields
-                layout = FloatLayout()
-
-                person_image = Image(source=member.getNextPicture(), 
-                    allow_stretch=True, 
-                    pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
-
-                btn_next_picture = Button(background_normal='', 
-                    background_color=rgba(0,0,0,0), 
-                    pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
-
-                btn_next_picture.bind(on_press=partial(self.nextPictureCallback, 
-                    loop_counter, person_image))
-
-                layout_names = BoxLayout(orientation='horizontal', 
-                    pos_hint={'x':.1, 'y':.6}, size_hint=(.8,.1))
-                lbl_names = Label(text=member.getName(1) + " " + '[i]' + 
-                    member.getName(2) + '[/i]' + " " + member.getName(3), 
-                    markup=True, font_size='20sp')
-                layout_names.add_widget(lbl_names)
-
-                btn_statement = Button(text=member.getNextStatement(), 
-                    font_size='15sp', background_normal='', 
-                    background_color=rgba(0,0,0,0),
-                    pos_hint={'x':.1, 'y':.2}, size_hint=(.8,.4))
-
-                btn_statement.bind(on_press=partial(self.nextStatementCallback, 
-                    loop_counter, btn_statement))
-
-                lbl_birthday = Label(text=member.getBirthday(), 
-                    font_size='15sp', pos_hint={'x':.2, 'bottom':1}, 
-                    size_hint=(.6,.1))
-
-                #adding a vertical row of buttons to quickly navigate to 
-                # specific members
-                layout_scroller = BoxLayout(orientation='vertical', 
-                    pos_hint={'right':1, 'bottom':1}, size_hint=(.1,1))
-
-                #using a counter var for the position of the members in 
-                # their array
-                count = 0
-
-                #looping through the members and creating a button for each one
-                for member_btn in self.members:
-                    #if we are on the specific slide of a member the specific 
-                    # button should be colored accordingly
-                    if member.getName(1) == member_btn.getName(1):
-                        tmp_button = Button(text=member_btn.getName(1), 
-                            id='btnJump' + member_btn.getName(1), 
-                            font_size='5sp', background_color=rgba(0,0,0,0))
-                    else:
-                        tmp_button = Button(text=member_btn.getName(1), 
-                            id='btnJump' + member_btn.getName(1), 
-                            font_size='5sp', background_normal = '', 
-                            background_color=rgba('0F0F0F'))
-
-                    tmp_button.bind(on_press=partial(self.jumpToMember, count))
-                    layout_scroller.add_widget(tmp_button)
-                    count = count + 1
-                
-                layout.add_widget(layout_scroller)
-                layout.add_widget(lbl_birthday)
-                layout.add_widget(btn_statement)
-                layout.add_widget(person_image)
-                layout.add_widget(layout_names)
-                layout.add_widget(btn_next_picture)
-
-                self.members_carousel.add_widget(layout)
-
-                loop_counter = loop_counter + 1
-
         
         #either way we add the newly created members_carousel to the main one
-        self.main_carousel.add_widget(self.members_carousel)
+        self.main_carousel.add_widget(widget_builder.buildMembersCarousel(
+            self.members_carousel, self.members, self))
 
     ############################################################################
     # showing the new popup to chose the filepath where the app should look for 
     # its data
+    # TODO: Update to widgetbuilder
     ############################################################################
     def showSetFilepathPopup(self, instance):
         popup_layout = FloatLayout()

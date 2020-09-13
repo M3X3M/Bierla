@@ -6,6 +6,8 @@ from kivy.utils import rgba
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.modalview import ModalView
+from kivy.uix.image import Image
+from kivy.uix.boxlayout import BoxLayout
 
 from functools import partial
 
@@ -26,6 +28,8 @@ class WrappedLabel(Label):
 
 ################################################################################
 # filling the scrollview
+# @param rules the whole rules array
+# @param widget the gridlayout that will be updated/build
 ################################################################################
 def buildRules(rules, widget):
     #starting position
@@ -61,6 +65,7 @@ def buildRules(rules, widget):
 
 ################################################################################
 # building the widget that holds the detailed view of a rule
+# @param rule, the specific rule that is displayed in this view
 ################################################################################
 def buildRuleView(rule, *args):
     main_layout = FloatLayout()
@@ -77,3 +82,97 @@ def buildRuleView(rule, *args):
     rule_view = ModalView(size_hint = (.9,.95), background = "Resources/262626.png", background_color=rgba('#0a5e00'))
     rule_view.add_widget(main_layout)
     rule_view.open()
+
+################################################################################
+# building each page of carousel that will be later added
+# @param carousel the carousel that will be filled
+# @param members the members array
+# @param instance whole instance of the .py file where the according methods sit
+# @return the newly build widget
+################################################################################
+def buildMembersCarousel(carousel, members, instance):
+        #checking if there are members in the array, if not creating a 
+        #page showing that there are no members detected
+        if len(members) == 0:
+            no_members_label = Label(text="No members found", font_size='30sp')
+            carousel.add_widget(no_members_label)
+            return carousel
+
+        else:
+            loop_counter = 0
+            for member in members:
+                #creating the layout that holds all the fields
+                layout = FloatLayout()
+
+                person_image = Image(source=member.getNextPicture(), 
+                    allow_stretch=True, 
+                    pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
+
+                btn_next_picture = Button(background_normal='', 
+                    background_color=rgba(0,0,0,0), 
+                    pos_hint={'x':.2, 'top':.99}, size_hint=(.6,.3))
+
+                btn_next_picture.bind(
+                    on_press=partial(instance.nextPictureCallback, 
+                    loop_counter, person_image))
+
+                layout_names = BoxLayout(orientation='horizontal', 
+                    pos_hint={'x':.1, 'y':.6}, size_hint=(.8,.1))
+                lbl_names = Label(text=member.getName(1) + " " + '[i]' + 
+                    member.getName(2) + '[/i]' + " " + member.getName(3), 
+                    markup=True, font_size='20sp')
+                layout_names.add_widget(lbl_names)
+
+                btn_statement = Button(text=member.getNextStatement(), 
+                    font_size='15sp', background_normal='', 
+                    background_color=rgba(0,0,0,0),
+                    pos_hint={'x':.1, 'y':.2}, size_hint=(.8,.4))
+
+                btn_statement.bind(
+                    on_press=partial(instance.nextStatementCallback, 
+                    loop_counter, btn_statement))
+
+                lbl_birthday = Label(text=member.getBirthday(), 
+                    font_size='15sp', pos_hint={'x':.2, 'bottom':1}, 
+                    size_hint=(.6,.1))
+
+                #adding a vertical row of buttons to quickly navigate to 
+                # specific members
+                layout_scroller = BoxLayout(orientation='vertical', 
+                    pos_hint={'right':1, 'bottom':1}, size_hint=(.1,1))
+
+                #using a counter var for the position of the members in 
+                # their array
+                count = 0
+
+                #looping through the members and creating a button for each one
+                for member_btn in members:
+                    #if we are on the specific slide of a member the specific 
+                    # button should be colored accordingly
+                    if member.getName(1) == member_btn.getName(1):
+                        tmp_button = Button(text=member_btn.getName(1), 
+                            id='btnJump' + member_btn.getName(1), 
+                            font_size='5sp', background_color=rgba(0,0,0,0))
+                    else:
+                        tmp_button = Button(text=member_btn.getName(1), 
+                            id='btnJump' + member_btn.getName(1), 
+                            font_size='5sp', background_normal = '', 
+                            background_color=rgba('0F0F0F'))
+
+                    tmp_button.bind(
+                        on_press=partial(instance.jumpToMember, count))
+                    layout_scroller.add_widget(tmp_button)
+                    count = count + 1
+                
+                layout.add_widget(layout_scroller)
+                layout.add_widget(lbl_birthday)
+                layout.add_widget(btn_statement)
+                layout.add_widget(person_image)
+                layout.add_widget(layout_names)
+                layout.add_widget(btn_next_picture)
+
+                carousel.add_widget(layout)
+
+                loop_counter = loop_counter + 1
+
+            return carousel
