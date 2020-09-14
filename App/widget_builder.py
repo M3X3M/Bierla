@@ -8,13 +8,31 @@ from kivy.uix.button import Button
 from kivy.uix.modalview import ModalView
 from kivy.uix.image import Image
 from kivy.uix.boxlayout import BoxLayout
+from kivy.app import App
+from kivy.graphics import Rectangle
+from kivy.graphics import Color
+from kivy.uix.widget import Widget
 
 from functools import partial
 
 # see documentation
 kivy.require("1.11.1")
 
-#TODO: Create the memberscarousel in this class!
+class CustomRectangle(Widget):
+    def __init__(self, r, g, b, a, **kwargs):
+        super(CustomRectangle, self).__init__(**kwargs)
+        with self.canvas:
+            Color(r,g,b,a, mode="rgba")
+            self.rect = Rectangle(pos = self.pos, size = self.size)
+
+        # Update the canvas as the screen size change 
+            self.bind(pos = self.update_rect, 
+                  size = self.update_rect) 
+  
+    # update function which makes the canvas adjustable. 
+    def update_rect(self, *args): 
+        self.rect.pos = self.pos 
+        self.rect.size = self.size 
 
 class WrappedLabel(Label):
     def __init__(self, **kwargs):
@@ -24,7 +42,8 @@ class WrappedLabel(Label):
         self.bind(
             width=lambda *x:
             self.setter('text_size')(self, (self.width, None)),
-            texture_size=lambda *x: self.setter('height')(self, self.texture_size[1]))
+            texture_size=lambda *x: self.setter('height')(self, 
+                self.texture_size[1]))
 
 ################################################################################
 # filling the scrollview
@@ -79,7 +98,8 @@ def buildRuleView(rule, *args):
     main_layout.add_widget(header)
     main_layout.add_widget(body)
 
-    rule_view = ModalView(size_hint = (.9,.95), background = "Resources/262626.png", background_color=rgba('#0a5e00'))
+    rule_view = ModalView(size_hint = (.9,.95), 
+        background = "Resources/262626.png", background_color=rgba('#0a5e00'))
     rule_view.add_widget(main_layout)
     rule_view.open()
 
@@ -123,6 +143,9 @@ def buildMembersCarousel(carousel, members, instance):
                     markup=True, font_size='20sp')
                 layout_names.add_widget(lbl_names)
 
+                back_label = CustomRectangle(0,0,0,1, 
+                    pos_hint={'x':0, 'y':.2}, size_hint=(1,.4))
+
                 btn_statement = Button(text=member.getNextStatement(), 
                     font_size='15sp', background_normal='', 
                     background_color=rgba(0,0,0,0),
@@ -145,19 +168,22 @@ def buildMembersCarousel(carousel, members, instance):
                 # their array
                 count = 0
 
+                layout.add_widget(back_label)
+
                 #looping through the members and creating a button for each one
                 for member_btn in members:
                     #if we are on the specific slide of a member the specific 
                     # button should be colored accordingly
                     if member.getName(1) == member_btn.getName(1):
-                        tmp_button = Button(text=member_btn.getName(1), 
+                        tmp_button = Button(text=member_btn.getName(4), 
                             id='btnJump' + member_btn.getName(1), 
-                            font_size='5sp', background_color=rgba(0,0,0,0))
+                            font_size='20sp', background_color=rgba('#0a5e00'),
+                            background_normal = "")
                     else:
-                        tmp_button = Button(text=member_btn.getName(1), 
+                        tmp_button = Button(text=member_btn.getName(4), 
                             id='btnJump' + member_btn.getName(1), 
-                            font_size='5sp', background_normal = '', 
-                            background_color=rgba('0F0F0F'))
+                            font_size='20sp', background_normal = '', 
+                            background_color=rgba('#262626'))
 
                     tmp_button.bind(
                         on_press=partial(instance.jumpToMember, count))
