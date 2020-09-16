@@ -124,48 +124,61 @@ def buildMembersCarousel(carousel, members, instance):
                 #creating the layout that holds all the fields
                 layout = FloatLayout()
 
-                #with the bar on the side the new center is .425 which should 
-                #mean we need to set everything .075 to the left 
+                logo_right = Image(source = 'Resources/OfficialLogo.png',
+                    pos_hint = {"center_y":.96,"x":.05},
+                    size_hint = (.1,.08), allow_stretch = 'True',
+                    kee_ratio = 'False')
+
+                logo_left = Image(source = 'Resources/OfficialLogo.png',
+                    pos_hint = {"center_y":.96,"x":.8},
+                    size_hint = (.1,.08), allow_stretch = 'True',
+                    kee_ratio = 'False')
+
+                #with the bar on the side the new center is .475 which should 
+                #mean we need to set everything .025 to the left 
 
                 person_image = Image(source=member.getNextPicture(), 
                     allow_stretch=True, 
-                    pos_hint={'x':.15, 'top':.99}, size_hint=(.6,.3))
+                    pos_hint={'x':.15, 'top':.99}, size_hint=(.65,.3))
 
                 btn_next_picture = Button(background_normal='', 
                     background_color=rgba(0,0,0,0), 
-                    pos_hint={'x':.15, 'top':.99}, size_hint=(.6,.3))
+                    pos_hint={'x':.15, 'top':.99}, size_hint=(.65,.3))
 
                 btn_next_picture.bind(
                     on_press=partial(instance.nextPictureCallback, 
                     loop_counter, person_image))
 
                 layout_names = BoxLayout(orientation='horizontal', 
-                    pos_hint={'x':.05, 'y':.6}, size_hint=(.8,.1))
+                    pos_hint={'x':.05, 'y':.6}, size_hint=(.85,.1))
                 lbl_names = Label(text=member.getName(1) + " " + '[i]' + 
                     member.getName(2) + '[/i]' + " " + member.getName(3), 
                     markup=True, font_size='20sp')
                 layout_names.add_widget(lbl_names)
 
                 back_label = CustomRectangle(0,0,0,1, 
-                    pos_hint={'x':.05, 'y':0}, size_hint=(.8,.68))
+                    pos_hint={'x':.025, 'y':.01}, size_hint=(.9,.67))
 
-                btn_statement = Button(text=member.getNextStatement(), 
-                    font_size='15sp', background_normal='', 
+                btn_statement = Button(background_normal='', 
                     background_color=rgba(0,0,0,0),
-                    pos_hint={'x':.05, 'y':.2}, size_hint=(.8,.4))
+                    pos_hint={'x':.025, 'y':.2}, size_hint=(.9,.4))
+
+                lbl_statement = WrappedLabel(text=member.getNextStatement(), 
+                    font_size="15sp", pos_hint={'x':.025,'y':.2}, 
+                    size_hint=(.9,.4))
 
                 btn_statement.bind(
                     on_press=partial(instance.nextStatementCallback, 
-                    loop_counter, btn_statement))
+                    loop_counter, lbl_statement))
 
                 lbl_birthday = Label(text=member.getBirthday(), 
                     font_size='15sp', pos_hint={'x':.15, 'bottom':1}, 
-                    size_hint=(.6,.1))
+                    size_hint=(.65,.1))
 
                 #adding a vertical row of buttons to quickly navigate to 
                 # specific members
                 layout_scroller = BoxLayout(orientation='vertical', 
-                    pos_hint={'right':1, 'bottom':1}, size_hint=(.1,1))
+                    pos_hint={'right':1, 'bottom':1}, size_hint=(.05,1))
 
                 #using a counter var for the position of the members in 
                 # their array
@@ -180,13 +193,16 @@ def buildMembersCarousel(carousel, members, instance):
                     if member.getName(1) == member_btn.getName(1):
                         tmp_button = Button(text=member_btn.getName(4), 
                             id='btnJump' + member_btn.getName(1), 
-                            font_size='20sp', background_color=rgba('#0a5e00'),
-                            background_normal = "")
+                            font_size='10sp', background_color=rgba('#0a5e00'),
+                            background_normal = "", color = rgba('#000000'),
+                            background_down = '')
                     else:
                         tmp_button = Button(text=member_btn.getName(4), 
                             id='btnJump' + member_btn.getName(1), 
-                            font_size='20sp', background_normal = '', 
-                            background_color=rgba('#262626'))
+                            font_size='10sp', background_normal = '', 
+                            background_color=rgba('#262626'),
+                            color = rgba('#0a5e00'),
+                            background_down = '')
 
                     tmp_button.bind(
                         on_press=partial(instance.jumpToMember, count))
@@ -196,9 +212,12 @@ def buildMembersCarousel(carousel, members, instance):
                 layout.add_widget(layout_scroller)
                 layout.add_widget(lbl_birthday)
                 layout.add_widget(btn_statement)
+                layout.add_widget(lbl_statement)
                 layout.add_widget(person_image)
                 layout.add_widget(layout_names)
                 layout.add_widget(btn_next_picture)
+                layout.add_widget(logo_left)
+                layout.add_widget(logo_right)
 
                 carousel.add_widget(layout)
 

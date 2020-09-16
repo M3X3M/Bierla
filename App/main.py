@@ -87,42 +87,16 @@ class ForFriendsApp(App):
         #loading the currently stored data (if there is any)
         self.loadDataPath()
 
-        #setting up the members by adding them into an array and then filling 
-        # the array in the method
-        self.members = []
-        self.refreshMembers()
-
-        #initialising the errors class // Not Functional at the moment
-        self.error = Error()
-
-        self.getGroupPictures()
-
         #initialising the animator
         self.animator = Animator()
 
-        #setting the first image on the main page and starting the animation 
-        # to animate the widget if there are multiple images
-        if self.group_pictures == []:
-            self.im_group_pic.source = "Resources/questionmark.png"
-        elif len(self.group_pictures) == 1:
-            self.im_group_pic.source = self.group_pictures[0]
-        else:
-            self.im_group_pic.source = self.group_pictures[0]
-            self.last_group_picture_pos = 0
-            self.group_loop_clock = Clock.schedule_once(self.changeGroupPic, 10)
-        
-        #setting the news array
-        self.buildNews()
-        #setting the first position of news Text is 0 ("Welcome")
-        self.last_news_pos = 0
+        #setting up the members by adding them into an array and then filling 
+        # the array in the method
+        self.members = []
+        self.refresh()
 
-        #setting a clock to change news (if we have more than 1)
-        if len(self.news_array) > 1:
-            self.news_loop_clock = Clock.schedule_once(self.updateNewsLabel, 7)
-
-        #building the rules page
-        rules = rule.scanRules(self.current_selected_path + '/rules.json')
-        widget_builder.buildRules(rules, self.lay_rules)
+        #initialising the errors class // Not Functional at the moment
+        self.error = Error()
 
         #kivy thing
         return self.designElements
@@ -221,17 +195,15 @@ class ForFriendsApp(App):
         self.lbl_file_path.text = path
 
         #refreshing membersarry
-        self.refreshMembers()
+        self.refresh()
 
         #closing the popup
         self.popup.dismiss()
 
     ############################################################################
-    # used to refresh the whole members array and all connected attributes. 
-    # Automatically called after path changed and start. 
-    # Also callback for refresh button in settings
+    # used to refresh all the different arrays and pages
     ############################################################################
-    def refreshMembers(self):
+    def refresh(self):
         #refreshing the members array
         self.members.clear()
         self.fillMembersArray()
@@ -242,12 +214,38 @@ class ForFriendsApp(App):
         self.lbl_members_count.text = ("currently " + 
             str(len(self.members)) + " members detected")
 
+        self.getGroupPictures()
+
+                #setting the first image on the main page and starting the animation 
+        # to animate the widget if there are multiple images
+        if self.group_pictures == []:
+            self.im_group_pic.source = "Resources/questionmark.png"
+        elif len(self.group_pictures) == 1:
+            self.im_group_pic.source = self.group_pictures[0]
+        else:
+            self.im_group_pic.source = self.group_pictures[0]
+            self.last_group_picture_pos = 0
+            self.group_loop_clock = Clock.schedule_once(self.changeGroupPic, 10)
+        
+        #setting the news array
+        self.buildNews()
+        #setting the first position of news Text is 0 ("Welcome")
+        self.last_news_pos = 0
+
+        #setting a clock to change news (if we have more than 1)
+        if len(self.news_array) > 1:
+            self.news_loop_clock = Clock.schedule_once(self.updateNewsLabel, 7)
+
+        #building the rules page
+        rules = rule.scanRules(self.current_selected_path + '/rules.json')
+        widget_builder.buildRules(rules, self.lay_rules)
+
     ############################################################################
     # direct callback for refresh button
     # TODO: Change with the other method "partial"
     ############################################################################
     def refreshCallback(self,instance):
-        self.refreshMembers()    
+        self.refresh()    
 
     ############################################################################
     # jumping to a specific member in the carousel, where member number 
@@ -449,6 +447,14 @@ class ForFriendsApp(App):
 
         #scheduling the new clock to redo the whole animation
         self.news_loop_clock = Clock.schedule_once(self.updateNewsLabel, 10)
+
+    def on_pause(self):
+        return False
+
+    def on_resume(self):
+        pass
+        
+
 
 if __name__ == '__main__':
     ForFriendsApp().run()

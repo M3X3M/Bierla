@@ -50,8 +50,8 @@
             FloatLayout:
                 size: root.width, root.height
                 FloatLayout:
-                    pos_hint: {'x':.08, 'y':.075}
-                    size_hint: (.925,.875)
+                    pos_hint: {'x':.05, 'y':.025}
+                    size_hint: (.9,.9)
                     canvas.before:
                         Color:
                             rgba: rgba('#000000')
@@ -64,7 +64,7 @@
                     pos_hint: {"center_y":.97,"center_x":.5}
                     size_hint_x: .8
                     size_hint_y: .1
-                    font_size: '40sp'
+                    font_size: '35sp'
 
                 Image:
                     source: "Resources/OfficialLogo.png"
@@ -99,8 +99,8 @@
                 size: root.width, root.height
 
                 Label:
-                    text: "Einstellungen"
-                    font_size: '20sp'
+                    text: "Settings"
+                    font_size: '35sp'
                     pos_hint: {"center_y": .95,"center_x": 0.5}
                     size_hint: (.5,.2)
 
@@ -131,4 +131,19 @@
                     Label:
                         text: "currently 0 members detected"
                         id:lblMembersCount
+
+
+                Image:
+                    source: "Resources/OfficialLogo.png"
+                    pos_hint: {"center_y":.96,"x":.1}
+                    size_hint: (.1,.08)
+                    allow_stretch: 'True'
+                    kee_ratio: 'False'
+
+                Image:
+                    source: "Resources/OfficialLogo.png"
+                    pos_hint: {"center_y":.96,"x":.8}
+                    size_hint: (.1,.08)
+                    allow_stretch: 'True'
+                    kee_ratio: 'False'
             
