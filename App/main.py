@@ -51,6 +51,8 @@ if platform == 'android':
 #TODO: Make config File
 GROUP_FOLDER = 'Group'
 
+#TODO: implement going on when parts of a member a missing
+
 class DesignElements(Widget):
     pass
 
