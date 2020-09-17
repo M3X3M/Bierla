@@ -13,6 +13,7 @@ class Member:
             self.first_name = names[0]
             self.middle_name = names[1]
             self.last_name = names[2]
+            self.short_name = names[3]
         except:
             print("Name-setting-Error")
             return
@@ -41,7 +42,8 @@ class Member:
         self.ShufflePictures()
         self.ShuffleStatements()
 
-    #for getting a specific name. 1 = first-, 2 = middle-, 3 = last-name
+    #for getting a specific name. 1 = first-, 2 = middle-, 3 = last-name, 
+    # 4 = shortname
     def getName(self, nameType):
         if nameType == 1:
             return self.first_name
@@ -49,6 +51,8 @@ class Member:
             return self.middle_name
         elif nameType == 3:
             return self.last_name
+        elif nameType == 4:
+            return self.short_name
 
     def getStatements(self):
         return self.statements

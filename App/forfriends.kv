@@ -49,10 +49,58 @@
 
             FloatLayout:
                 size: root.width, root.height
+                FloatLayout:
+                    pos_hint: {'x':.05, 'y':.025}
+                    size_hint: (.9,.9)
+                    canvas.before:
+                        Color:
+                            rgba: rgba('#000000')
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
 
                 Label:
-                    text: "Einstellungen"
-                    font_size: '20sp'
+                    text: "Rules"
+                    pos_hint: {"center_y":.97,"center_x":.5}
+                    size_hint_x: .8
+                    size_hint_y: .1
+                    font_size: '35sp'
+
+                Image:
+                    source: "Resources/OfficialLogo.png"
+                    pos_hint: {"center_y":.96,"x":.1}
+                    size_hint: (.1,.08)
+                    allow_stretch: 'True'
+                    kee_ratio: 'False'
+
+                Image:
+                    source: "Resources/OfficialLogo.png"
+                    pos_hint: {"center_y":.96,"x":.8}
+                    size_hint: (.1,.08)
+                    allow_stretch: 'True'
+                    kee_ratio: 'False'
+
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    size_hint_x: .8
+                    size_hint_y: .9
+                    pos_hint: {"center_y":.5,"center_x":.5}
+
+                    GridLayout:
+                        id: layRules
+                        cols: 1
+                        size_hint_x: 1
+                        size_hint_y: None
+                        spacing: 10
+                        padding: 10
+
+            FloatLayout:
+                size: root.width, root.height
+
+                Label:
+                    text: "Settings"
+                    font_size: '35sp'
                     pos_hint: {"center_y": .95,"center_x": 0.5}
                     size_hint: (.5,.2)
 
@@ -83,4 +131,19 @@
                     Label:
                         text: "currently 0 members detected"
                         id:lblMembersCount
+
+
+                Image:
+                    source: "Resources/OfficialLogo.png"
+                    pos_hint: {"center_y":.96,"x":.1}
+                    size_hint: (.1,.08)
+                    allow_stretch: 'True'
+                    kee_ratio: 'False'
+
+                Image:
+                    source: "Resources/OfficialLogo.png"
+                    pos_hint: {"center_y":.96,"x":.8}
+                    size_hint: (.1,.08)
+                    allow_stretch: 'True'
+                    kee_ratio: 'False'
             
