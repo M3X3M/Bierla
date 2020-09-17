@@ -132,15 +132,24 @@ class ForFriendsApp(App):
 
             members_dict = json.loads(data)
 
-            for member in members_dict:
-                tmp_member = Member([member['firstname'], member['middlename'], 
-                    member['lastname'], member['shortname']], 
-                    member['birthday'], member['statements'], 
-                    self.current_selected_path)
-
-                self.members.append(tmp_member)
         except:
             print('No path')
+            members_dict = []
+
+        for member in members_dict:
+            if "shortname" in member:
+                shortname = member['shortname']
+
+            else:
+                shortname = "404"
+
+            tmp_member = Member([member['firstname'], member['middlename'], 
+                member['lastname'], shortname], 
+                member['birthday'], member['statements'], 
+                self.current_selected_path)
+
+            self.members.append(tmp_member)
+
 
     ############################################################################
     # rebuilding the memberscarousel from scratch by wiping the old one and 
@@ -206,6 +215,12 @@ class ForFriendsApp(App):
     # used to refresh all the different arrays and pages
     ############################################################################
     def refresh(self):
+        try:
+            Clock.unschedule(self.group_loop_clock)
+
+        except:
+            print("no clock yet")
+
         #refreshing the members array
         self.members.clear()
         self.fillMembersArray()
@@ -301,8 +316,6 @@ class ForFriendsApp(App):
                 complete_filepath = (self.current_selected_path + '/' + 
                     GROUP_FOLDER + '/' + file)
                 self.group_pictures.append(complete_filepath)
-
-        print(self.group_pictures)
 
     ############################################################################
     # callback for changing the picture on the main page. Called in intervals
